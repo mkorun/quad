@@ -49,14 +49,14 @@ This is a different problem than what Prettier and js-beautify solve:
 | | quad | js-beautify | Prettier |
 |--|:---------:|:-----------:|:--------:|
 | Primary target | **Build pipeline** | Editor / Build | Editor / CI |
-| Dependencies | **0** | 5 | ~100 |
-| Installed size (unpacked) | **~58 KB** | ~500 KB | ~2 MB |
+| Dependencies (package.json) | **0** | 5 | 0 |
+| `npm install` footprint | **~58 KB** | ~8.2 MB (20 packages) | ~9.7 MB |
 | API | **sync** | sync | async (Promise) |
 | RE2-compatible | **Yes** | Yes | No |
 | Text wrapping | Yes | Yes | No |
 | HTML normalization | **Yes** | No | Partial |
 
-js-beautify is a pure pretty-printer — it passes through whatever it receives, does not correct spec violations, and requires 5 dependencies. Prettier does normalize some constructs but requires async, ~100 dependencies, and is not designed for build-pipeline integration. quad is the only tool in this space that combines formatting with normalization in a sync, zero-dependency package.
+Dependency *count* isn't the whole story: Prettier lists zero runtime dependencies (it bundles everything internally) but is still ~9.7 MB on disk once installed; js-beautify's 5 direct dependencies pull in 20 packages and ~8.2 MB transitively. Numbers are actual `npm install` output in an empty project, not each package's own tarball size — reproduce with `mkdir t && cd t && npm init -y && npm install <package> && du -sh node_modules`. js-beautify is a pure pretty-printer — it passes through whatever it receives and does not correct spec violations. Prettier does normalize some constructs but requires async and is not designed for build-pipeline integration. quad is the only tool in this space that combines formatting with normalization in a sync, zero-dependency, sub-100-KB package.
 
 **Minification** is out of scope — quad adds whitespace for readability, not removes it. For a production pipeline that needs minimal output, the two concerns compose cleanly:
 
@@ -222,7 +222,7 @@ cd quad && bun install && bun run bench
 | edge-cases (1.7 KB) | 90 µs | 499 µs | ×5.5 |
 | **avg** | **361 µs** | **1257 µs** | **×3.5** |
 
-Prettier is intentionally not benchmarked — it has no synchronous API, carries ~100 transitive dependencies, and is not designed for build-pipeline use. js-beautify is the relevant comparison: same weight class, same build-friendly API. It has 5 dependencies and only formats — no normalization. quad does both and is still faster, with zero runtime dependencies.
+Prettier is intentionally not benchmarked — it has no synchronous API, ships ~9.7 MB of bundled parser code, and is not designed for build-pipeline use. js-beautify is the relevant comparison: same weight class, same build-friendly API. It has 5 dependencies and only formats — no normalization. quad does both and is still faster, at a fraction of the footprint of either.
 
 **A fairness note on this number:** the two tools don't do exactly the same amount of work. js-beautify actively restructures `<script>`/`<style>`/`<svg>` content (re-formats JS/CSS, reindents nested SVG markup); quad deliberately treats that content as opaque and copies it verbatim (see [Context-aware blocks](#context-aware-blocks)). On fixtures with a lot of embedded script/style/SVG, that gives quad a work-based head start that has nothing to do with tokenizer speed. Measuring the same fixtures with those blocks emptied out narrows the factor to **~3.1–3.7×** — still a real, consistent advantage, just not quite as dramatic as the headline number on documents that happen to be light on embedded script/style/SVG.
 

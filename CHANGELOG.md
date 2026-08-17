@@ -3,6 +3,12 @@
 All notable changes to `quad` are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.1.1] — 2026-08-17
+
+### Fixed
+
+- README comparison table and prose had an inaccurate "Prettier: ~100 dependencies, ~2 MB installed" claim. Verified against the actual registry data: Prettier ships **0** runtime dependencies (fully bundled) but is **~9.7 MB** installed. js-beautify's installed footprint was also corrected from an unverified "~500 KB" to the real, measured `npm install` footprint (**~8.2 MB** across its 20 transitive packages). No code changes — documentation only.
+
 ## [0.1.0] — 2026-06-30
 
 ### Added
