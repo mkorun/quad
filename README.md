@@ -50,7 +50,7 @@ This is a different problem than what Prettier and js-beautify solve:
 |--|:---------:|:-----------:|:--------:|
 | Primary target | **Build pipeline** | Editor / Build | Editor / CI |
 | Dependencies (package.json) | **0** | 5 | 0 |
-| `npm install` footprint | **~58 KB** | ~8.2 MB (20 packages) | ~9.7 MB |
+| `npm install` footprint | **~61 KB** | ~8.2 MB (20 packages) | ~9.7 MB |
 | API | **sync** | sync | async (Promise) |
 | RE2-compatible | **Yes** | Yes | No |
 | Text wrapping | Yes | Yes | No |
@@ -200,7 +200,7 @@ Whitespace artifacts from template rendering are cleaned up before formatting:
 - `< div>` → `<div>` (space after `<`)
 - `<div >` → `<div>` (space before `>`)
 
-This tolerance only ever fires when what follows really is a tag: if a second, unquoted `<` turns up before the tag's own closing `>` (e.g. an unencoded `<` in prose like `a < b`), quad backs off and treats the original `<` as literal text instead of speculatively swallowing everything up to some unrelated later `>`. See [Known Limitations](#known-limitations).
+If a second, unquoted `<` turns up before the tag's own closing `>` (e.g. an unencoded `<` in prose like `a < b</p>`), quad backs off and treats the original `<` as literal text instead of speculatively swallowing everything up to some unrelated later `>`. This bailout narrows the ambiguity but doesn't remove it — see [Known Limitations](#known-limitations) for the cases it doesn't catch.
 
 ---
 
@@ -236,7 +236,7 @@ Prettier is intentionally not benchmarked — it has no synchronous API, ships ~
 - **Nested same-name raw blocks** (e.g. a string literal containing the text `</script>` inside a `<script>` element) end the block at that first occurrence — this matches how browsers actually tokenize HTML (`<script>` content is not parsed for further tags, the first literal `</script>` always ends it), so it's spec-correct behavior, not a quad-specific quirk.
 - **Comment contents are not reformatted.** A multi-line `<!-- ... -->` block is emitted as one unit with its original internal line breaks and indentation kept exactly as written. Comments between inline content stay attached so they cannot introduce or remove visible word spacing; comments in block layout may be repositioned with the surrounding indentation.
 - **`<script>`/`<style>`/`<svg>` inner content is excluded from the automated comparison against js-beautify** (see `differential/`) — js-beautify actively restructures JS/CSS and reformats SVG markup, while quad deliberately treats these blocks as opaque. Element structure and attributes are still compared; quad's own raw-content preservation contract is covered directly by unit tests.
-- **An unencoded `<` immediately followed by a letter, with no other tag anywhere in the rest of the input, still gets misread as an unterminated tag** (e.g. the standalone string `a < b` becomes `a <b`). The stray-`<` bailout (see [Fix tags](#fix-tags)) only triggers when a *second* `<` shows up before the first one's `>` — with nothing else in the document, there's nothing to trigger it. Real HTML documents always have further markup after any given point, so this is a theoretical edge case for content quad actually formats, not something observed in practice.
+- **An unencoded `<` immediately followed by a letter in prose can still be misread as a tag start — the stray-`<` bailout (see [Fix tags](#fix-tags)) narrows this, it doesn't eliminate it.** Two cases remain: (1) a bare `<` + letter with *no other tag anywhere in the rest of the input* never triggers the bailout, since there's no second `<` for it to find (`a < b` → `a <b`); (2) an unquoted `>` appearing before the next `<` is read as that tag's own closing `>`, so `a < b > c` becomes `a <b> c` — a real, recognized `<b>` (bold) tag gets fabricated, not just an unterminated one. Both require unencoded `<`/`>` in prose text, which valid HTML avoids (`&lt;`/`&gt;` are the correct encodings); real documents also almost always have further markup after any given point, which is what the bailout relies on. Not something observed in quad's own test corpus, but a real gap in the heuristic, not just a theoretical one.
 
 ---
 
@@ -244,10 +244,12 @@ Prettier is intentionally not benchmarked — it has no synchronous API, ships ~
 
 quad is designed for **build-pipeline use** — it formats HTML that you generated yourself from your own templates. It is synchronous and has no timeout: a pathological input could theoretically block the thread indefinitely. (quad's own lexer guarantees forward progress on every character — no known input hangs quad itself — but "no known input" is not a safety guarantee for content you don't control.)
 
-If you need to format HTML from an untrusted source (user-submitted content, scraped pages, third-party APIs), run quad inside a Worker thread with a timeout. quad is ESM-only, so the worker needs its own file — `require()` on an ESM package inside an `eval: true` Worker (a common pattern for CJS packages) will not work here:
+If you need to format HTML from an untrusted source (user-submitted content, scraped pages, third-party APIs), run quad inside a Worker thread with a timeout. quad is ESM-only, so the worker needs its own file — `require()` on an ESM package inside an `eval: true` Worker (a common pattern for CJS packages) will not work here.
+
+The examples below target the compiled worker (`worker.mjs`), since plain Node — quad's only stated runtime requirement is Node ≥18 — can't execute a `.ts` file directly without a loader. Compile it as part of your build (`tsc`, esbuild, ...), or if you're running under Bun or a TS-loader setup (`tsx`, `ts-node/esm`, ...), point the `Worker`/`Piscina` target at `worker.ts` instead — those can load TypeScript natively.
 
 ```typescript
-// worker.ts — a real, separate file, imported by the Worker below
+// worker.ts — compiled to worker.mjs, a real, separate file loaded by the Worker below
 import { parentPort, workerData } from 'node:worker_threads'
 import htmlFmt from '@mkorun/quad'
 
@@ -260,7 +262,7 @@ import { Worker } from 'node:worker_threads'
 
 function htmlFmtSafe(html: string, timeoutMs = 5000): Promise<string> {
   return new Promise((resolve, reject) => {
-    const worker = new Worker(new URL('./worker.ts', import.meta.url), { workerData: html })
+    const worker = new Worker(new URL('./worker.mjs', import.meta.url), { workerData: html })
 
     const timer = setTimeout(() => {
       worker.terminate()
@@ -276,7 +278,7 @@ function htmlFmtSafe(html: string, timeoutMs = 5000): Promise<string> {
 For high-throughput scenarios, use a Worker pool (e.g. [piscina](https://github.com/piscinajs/piscina)) to avoid the per-call thread-start overhead (~5–10 ms):
 
 ```typescript
-// worker.ts
+// worker.ts — compiled to worker.mjs, see note above
 import htmlFmt from '@mkorun/quad'
 export default (html: string) => htmlFmt(html)
 ```
@@ -285,7 +287,7 @@ export default (html: string) => htmlFmt(html)
 // main.ts
 import Piscina from 'piscina'
 
-const pool = new Piscina({ filename: new URL('./worker.ts', import.meta.url).pathname })
+const pool = new Piscina({ filename: new URL('./worker.mjs', import.meta.url).pathname })
 const formatted = await pool.run(untrustedHtml)
 ```
 
@@ -295,14 +297,16 @@ A persistent pool reduces per-call overhead to ~0.5–1 ms (IPC serialization on
 
 ## RE2 compatibility
 
-quad is fully RE2-compatible, safe to use in RE2-based environments such as Cloudflare Workers and Deno Deploy. Tokenization itself is a plain character/index scanner — not regex-based at all, so it has no RE2 exposure by construction. The handful of remaining regexes (tab replacement, a dynamically-built `</tagname\s*>` raw-content terminator, a couple of literal-character replacements) use only character classes and anchors — no lookaheads, lookbehinds, or backreferences anywhere in the codebase.
+quad's regular expressions use only constructs supported by RE2. Tokenization itself is a plain character/index scanner — not regex-based at all, so it has no RE2 exposure by construction. The handful of remaining regexes (tab replacement, a dynamically-built `</tagname\s*>` raw-content terminator, a couple of literal-character replacements) use only character classes and anchors — no lookaheads, lookbehinds, or backreferences anywhere in the codebase, so there's no catastrophic-backtracking risk on any regex engine, RE2 or otherwise.
+
+This matters if you ever run quad somewhere that specifically requires RE2 syntax (e.g. embedding it in a Go or Rust host via a JS engine backed by RE2, or a linter that flags non-RE2-safe patterns) — not because common edge/serverless platforms use RE2 themselves. Cloudflare Workers and Deno Deploy, for instance, both run on V8 (the same regex engine as Node and Chrome), not RE2 — they're mentioned here only as compatible target environments, not as evidence that RE2-compatibility was required to run on them.
 
 ---
 
 ## Tests
 
 ```bash
-bun test   # 138 tests: 130 unit tests + 8 differential/idempotency/extractor tests
+bun test   # 139 tests: 131 unit tests + 8 differential/idempotency/extractor tests
 ```
 
 | Group | Coverage |

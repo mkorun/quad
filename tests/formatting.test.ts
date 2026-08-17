@@ -916,4 +916,13 @@ describe('htmlFmt — unencoded "<" in prose does not corrupt the rest of the do
 		expect(htmlFmt('<div title="a < b">x</div>')).toBe('<div title="a < b">x</div>')
 	})
 
+	// Documents a known, remaining gap (see README "Known Limitations") rather than desired
+	// behavior: an unquoted ">" before the next "<" is read as the tag's own closing ">", so the
+	// bailout never triggers and a real <b> (bold) tag gets fabricated from plain prose. Locked in
+	// here so a future change to this doesn't silently alter it without the README being updated.
+	it('KNOWN GAP: an unquoted ">" before the next "<" still fabricates a tag', () => {
+		const result = htmlFmt('<p>a < b > c</p><p>after</p>')
+		expect(result).toBe('<p>a <b> c</p>\n<p>after</p>')
+	})
+
 })

@@ -1,6 +1,6 @@
 {
 	"name": "@mkorun/quad",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "quad — HTML formatter and normalizer for build pipelines",
 	"type": "module",
 	"author": "Michael Kortstiege <michael@mko.run>",
