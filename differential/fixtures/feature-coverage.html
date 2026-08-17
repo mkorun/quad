@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>quad feature coverage fixture</title>
+  <link rel="stylesheet" href="/style.css">
+  <script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Feature coverage","author":{"@type":"Person","name":"Test Author"}}
+  </script>
+</head>
+<body>
+
+  <h1>Void elements</h1>
+  <p>Line one<br>line two<br>line three.</p>
+  <hr>
+  <img src="a.jpg" alt="an image">
+  <input type="text" name="q" placeholder="search" required>
+  <p>Meta and link already in head; area/col/embed/source/track/wbr below:</p>
+  <map name="m"><area shape="rect" coords="0,0,10,10" href="#a" alt="a"></map>
+  <table>
+    <colgroup><col span="2"></colgroup>
+    <tbody><tr><td>a</td><td>b</td></tr></tbody>
+  </table>
+  <audio controls><source src="a.mp3" type="audio/mpeg"></audio>
+  <video controls><track kind="captions" src="c.vtt"></video>
+  <p>Long<wbr>word</p>
+
+  <h1>Inline elements together</h1>
+  <p>
+    Text with <a href="/x">a link</a>, <abbr title="Abbreviation">abbr</abbr>,
+    <b>bold</b>, <i>italic</i>, <em>emphasis</em>, <strong>strong</strong>,
+    <code>inline code</code>, <mark>marked</mark>, <small>small</small>,
+    <sub>sub</sub> and <sup>sup</sup>, <s>strikethrough</s>, <u>underline</u>,
+    <q>a quote</q>, <cite>a citation</cite>, <time datetime="2026-01-01">a date</time>,
+    <data value="42">forty-two</data>, <kbd>Ctrl</kbd>+<kbd>C</kbd>,
+    <var>x</var> = <samp>output</samp>, <dfn>definition</dfn>, all in one paragraph.
+  </p>
+
+  <h1>Definition list (compact, single-line source)</h1>
+  <dl><dt>Term A</dt><dd>Definition A</dd><dt>Term B</dt><dd>Definition B</dd></dl>
+
+  <h1>Table</h1>
+  <table>
+    <thead><tr><th>Name</th><th>Value</th></tr></thead>
+    <tbody>
+      <tr><td>alpha</td><td>1</td></tr>
+      <tr><td>beta</td><td>2</td></tr>
+    </tbody>
+  </table>
+
+  <h1>SVG with self-closing children</h1>
+  <svg viewBox="0 0 24 24" width="24" height="24">
+    <circle cx="12" cy="12" r="10" />
+    <path d="M0 0 L10 10" stroke="black" />
+    <rect x="1" y="1" width="5" height="5"/>
+  </svg>
+
+  <h1>Attribute quoting styles</h1>
+  <div class="double" id='single' data-unquoted=value data-empty="">
+    <span data-x="a &amp; b">entity in attribute</span>
+  </div>
+
+  <h1>Comments</h1>
+  <!-- a single-line comment -->
+  <p>
+    Before<!-- inline --> after.
+  </p>
+  <!--
+    a multi-line
+    comment block
+  -->
+
+  <h1>Raw content</h1>
+  <script>
+    function greet(name) {
+      if (name.length > 0) {
+        console.log("hi " + name);
+      }
+    }
+  </script>
+  <style>
+    .box { display: flex; align-items: center; }
+    .box > .item { margin: 0 4px; }
+  </style>
+  <pre>  keep    this   exactly
+as written, including   spacing.</pre>
+  <textarea>Line one
+Line two with <fake-tag> inside</textarea>
+
+  <h1>Long attribute list (triggers line wrapping)</h1>
+  <a class="btn btn-primary btn-large" href="/some/very/long/path/that/is/quite/long" data-tracking-id="header-nav-cta" data-analytics-category="navigation" target="_blank" rel="noopener noreferrer">Click here</a>
+
+  <h1>Mixed-case tags</h1>
+  <DIV CLASS="upper"><P>Upper-case tag and attribute names</P></DIV>
+
+</body>
+</html>

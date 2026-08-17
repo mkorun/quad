@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <!-- VG Wort: verhindert dass Zugriffe ohne Referrer-URL im Metis-Portal landen -->
+  <meta name="generator" content="hadley">
+  <meta name="theme-color" content="#0f172a">
+  <!-- = --color-bg in style.css; bei Farbänderung synchron halten -->
+  <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
+  <link rel="stylesheet" type="text/css" href="/assets/css/syntax-highlighting.css">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="alternate" type="application/rss+xml" title="teblo" href="/feed.xml">
+  <!-- IndieWeb identity -->
+  <link rel="me" href="https://github.com/mkorun">
+  <link rel="me" href="https://social.tchncs.de/@mkorun">
+  <link rel="me" href="https://www.npmjs.com/~mkorun">
+  <link rel="me" href="https://dev.to/mkorun">
+  <link rel="me" href="https://bsky.app/profile/mkorun.bsky.social">
+  <link rel="me" href="mailto:michael@teblo.de">
+  <title>HMD-Testseite (Hadley Markdown Extensions)</title>
+  <meta name="description" content="Testseite für alle HMD-spezifischen Erweiterungen und Abweichungen vom Standard-Markdown.">
+  <link rel="canonical" href="https://teblo.de/hmd-testseite/">
+  <meta property="og:title" content="HMD-Testseite (Hadley Markdown Extensions)">
+  <meta property="og:site_name" content="teblo · Software, Werkzeuge, KI – und das Denken dahinter">
+  <meta property="og:url" content="https://teblo.de/hmd-testseite/">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:type" content="article">
+  <meta property="og:description" content="Testseite für alle HMD-spezifischen Erweiterungen und Abweichungen vom Standard-Markdown.">
+  <meta property="og:image" content="https://teblo.de/hmd-testseite/og.jpg">
+  <link rel="alternate" hreflang="de" href="https://teblo.de/hmd-testseite/">
+  <meta name="citation_issn" content="3055-1935">
+  <meta name="DC.identifier" content="ISSN 3055-1935">
+</head>
+
+<body class="post-template tag-getting-started page-body has-hero" data-hadley-editor>
+  <div class="progress-bar" aria-hidden="true"></div>
+  <div class="dev-overlay" aria-hidden="true"><span class="dev-overlay__item dev-overlay__item--ok" title="VG Wort: Verbreitungsvergütung meldefähig (≥ 1.800)">
+    4.887 Zeichen</span>  </div>
+  <div class="page-wrapper"><a class="skip-link" href="#main-content">Zum Inhalt springen</a> 
+    <header class="back-header" data-pagefind-ignore id="back-header"><a class="back-link" href="/"> 
+      <svg class="back-icon" 
+           aria-hidden="true" 
+           focusable="false" 
+           fill="none" 
+           stroke="currentColor" 
+           viewBox="0 0 24 24" 
+           xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+    </svg><span>Zurück</span> </a> 
+      <div class="header-actions">
+        <div class="header-social">          <a class="header-social-link" 
+             href="https://github.com/mkorun" 
+             aria-label="GitHub" 
+             target="_blank" 
+             rel="noopener noreferrer"> 
+          <svg xmlns="http://www.w3.org/2000/svg" 
+               viewBox="0 0 256 256" 
+               width="20" 
+               height="20" 
+               fill="currentColor" 
+               aria-hidden="true"><path d="M203.94,76.16A55.73,55.73,0,0,0,199.46,30,4,4,0,0,0,196,28a55.78,55.78,0,0,0-46,24H122A55.78,55.78,0,0,0,76,28a4,4,0,0,0-3.46,2,55.73,55.73,0,0,0-4.48,46.16A53.78,53.78,0,0,0,60,104v8a52.06,52.06,0,0,0,52,52h1.41A36,36,0,0,0,100,192v12H72a28,28,0,0,1-28-28A36,36,0,0,0,8,140a4,4,0,0,0,0,8,28,28,0,0,1,28,28,36,36,0,0,0,36,36h28v20a4,4,0,0,0,8,0V192a28,28,0,0,1,56,0v40a4,4,0,0,0,8,0V192a36,36,0,0,0-13.41-28H160a52.06,52.06,0,0,0,52-52v-8A53.78,53.78,0,0,0,203.94,76.16ZM204,112a44.05,44.05,0,0,1-44,44H112a44.05,44.05,0,0,1-44-44v-8a45.76,45.76,0,0,1,7.71-24.89,4,4,0,0,0,.53-3.84,47.82,47.82,0,0,1,2.1-39.21,47.8,47.8,0,0,1,38.12,22.1A4,4,0,0,0,119.83,60h32.34a4,4,0,0,0,3.37-1.84,47.8,47.8,0,0,1,38.12-22.1,47.82,47.82,0,0,1,2.1,39.21,4,4,0,0,0,.53,3.83A45.85,45.85,0,0,1,204,104Z" /></svg></a>           <a class="header-social-link" 
+             href="https://social.tchncs.de/@mkorun" 
+             aria-label="Mastodon" 
+             target="_blank" 
+             rel="noopener noreferrer me"> 
+          <svg xmlns="http://www.w3.org/2000/svg" 
+               viewBox="0 0 256 256" 
+               width="20" 
+               height="20" 
+               fill="currentColor" 
+               aria-hidden="true"><path d="M184,36H72A36,36,0,0,0,36,72V192a36,36,0,0,0,36,36h88a4,4,0,0,0,0-8H72a28,28,0,0,1-28-28V180H184a36,36,0,0,0,36-36V72A36,36,0,0,0,184,36Zm28,108a28,28,0,0,1-28,28H44V72A28,28,0,0,1,72,44H184a28,28,0,0,1,28,28Zm-32-40v32a4,4,0,0,1-8,0V104a20,20,0,0,0-40,0v32a4,4,0,0,1-8,0V104a20,20,0,0,0-40,0v32a4,4,0,0,1-8,0V104a28,28,0,0,1,52-14.41A28,28,0,0,1,180,104Z" /></svg></a> <a class="header-social-link" href="/feed/" target="_blank" rel="noopener noreferrer" aria-label="RSS-Feed"> 
+          <svg xmlns="http://www.w3.org/2000/svg" 
+               viewBox="0 0 256 256" 
+               width="20" 
+               height="20" 
+               fill="currentColor" 
+               aria-hidden="true"><path d="M106.91,149.09A71.53,71.53,0,0,1,128,200a8,8,0,0,1-16,0,56,56,0,0,0-56-56,8,8,0,0,1,0-16A71.53,71.53,0,0,1,106.91,149.09ZM56,80a8,8,0,0,0,0,16A104,104,0,0,1,160,200a8,8,0,0,0,16,0A120,120,0,0,0,56,80Zm118.79,1.21A166.9,166.9,0,0,0,56,32a8,8,0,0,0,0,16A151,151,0,0,1,163.48,92.52,151,151,0,0,1,208,200a8,8,0,0,0,16,0A166.9,166.9,0,0,0,174.79,81.21ZM60,184a12,12,0,1,0,12,12A12,12,0,0,0,60,184Z" /></svg></a> 
+          <button class="search-trigger search-trigger--unavailable" 
+                  title="Suche nur in hadley deploy verfügbar" 
+                  aria-disabled="true">
+            <svg xmlns="http://www.w3.org/2000/svg" 
+                 viewBox="0 0 256 256" 
+                 width="20" 
+                 height="20" 
+                 fill="currentColor" 
+                 aria-hidden="true"><path d="M226.83,221.17l-52.7-52.7a84.1,84.1,0,1,0-5.66,5.66l52.7,52.7a4,4,0,0,0,5.66-5.66ZM36,112a76,76,0,1,1,76,76A76.08,76.08,0,0,1,36,112Z" /></svg>
+          </button>
+        </div></div>
+    </header>
+    <script src="/assets/js/scroll-header.js"></script>
+    <main id="main-content" data-pagefind-body>
+      <article class="markdown gh-content">
+        <header class="article-header">
+          <div class="article-header-content">
+            <p class="article-meta"><span class="badge-status badge-draft">Entwurf</span></p>
+            <h1 class="article-title">HMD-Testseite (Hadley Markdown Extensions)</h1>
+          </div>
+        </header>
+        <div class="article-actions" data-pagefind-ignore>
+          <button class="toc-btn" popovertarget="toc-popover">Inhalt</button>
+          <nav id="toc-popover" class="toc-popover" popover aria-label="Inhalt">
+            <p class="toc-label">Inhalt</p>
+            <ol>
+              <li><a href="#überschriften">Überschriften</a></li>
+              <li><a href="#h2">H2</a></li>
+              <li><a href="#h2-via-setext">H2 via Setext</a></li>
+              <li><a href="#kritische-abweichung-ist-kein-italic">⚠ Kritische Abweichung: _ ist kein Italic</a></li>
+              <li><a href="#inline-erweiterungen">Inline-Erweiterungen</a></li>
+              <li><a href="#links">Links</a></li>
+              <li><a href="#annotierter-link">Annotierter Link</a></li>
+              <li><a href="#übersetzungs-link">Übersetzungs-Link</a></li>
+              <li><a href="#bildgruppe">Bildgruppe</a></li>
+              <li><a href="#fußnoten-und-marginalnoten">Fußnoten und Marginalnoten</a></li>
+              <li><a href="#abkürzungen">Abkürzungen</a></li>
+              <li><a href="#definitionsliste">Definitionsliste</a></li>
+              <li><a href="#tabelle-ohne-ausrichtung">Tabelle ohne Ausrichtung</a></li>
+              <li><a href="#tabelle-mit-ausrichtung">Tabelle mit Ausrichtung</a></li>
+              <li><a href="#listen">Listen</a></li>
+              <li><a href="#codeblöcke-mit-syntax-highlighting">Codeblöcke mit Syntax-Highlighting</a></li>
+              <li><a href="#task-liste">Task-Liste</a></li>
+              <li><a href="#autolinks">Autolinks</a></li>
+              <li><a href="#blockquote">Blockquote</a></li>
+              <li><a href="#html-passthrough">HTML-Passthrough</a></li>
+            </ol>
+          </nav>
+          <button class="toc-btn toc-btn--series" popovertarget="series-popover-0">Teil 1 von 2</button>
+          <nav id="series-popover-0" class="toc-popover" popover aria-label="Artikelserie">
+            <p class="toc-label">Artikelserie</p>
+            <ol>
+              <li class="series-current" aria-current="true"><span data-link-unpublished>HMD-Testseite (Hadley Markdown Extensions)</span></li>
+              <li><a href="/hadley-ssg-warum/">Ich baue meinen eigenen Static Site Generator</a></li>
+            </ol>
+          </nav>
+        </div>
+        <p data-hadley-id="0797118b-3cf5-49df-8770-769dd759f4df">
+          Diese Seite dokumentiert und testet alle
+          <abbr title="Hadley Markdown">HMD</abbr>
+          -spezifischen Syntaxelemente — Erweiterungen und bewusste Abweichungen vom Standard-Markdown. Sie bleibt
+          dauerhaft als Draft.
+        </p>
+        <hr data-hadley-id="34b435af-62a9-4970-b532-591d96633de6">
+        <h2 id="überschriften" data-hadley-id="7c661b5f-7564-4df7-99ae-e84e3d1cfae4">Überschriften</h2>
+        <p data-hadley-id="d625b762-7202-43a3-8803-7710e7ba2567">ATX-Stil (alle Level):</p>
+        <h2 id="h2" data-hadley-id="ce83b663-8522-45c0-8823-b742a6e6a9fa">H2</h2>
+        <h3 id="h3" data-hadley-id="340ff159-b325-4e95-abbf-f129f4d6cda6">H3</h3>
+        <h4 id="h4" data-hadley-id="77f395b5-3cd1-494b-a54c-9608070a30a1">H4</h4>
+        <h5 id="h5" data-hadley-id="ba8f5b4e-3b74-491d-b00f-26a11ca7eae0">H5</h5>
+        <h6 id="h6" data-hadley-id="925c2cda-ea2a-4847-adc6-f4713c8fce1e">H6</h6>
+        <p data-hadley-id="710b9d58-102e-4691-912c-839f02f4daf0">Setext-Stil (H1 und H2):</p>
+        <h1 id="h1-via-setext" data-hadley-id="eac8b519-eb60-4390-9630-0799e1a61702">H1 via Setext</h1>
+        <h2 id="h2-via-setext" data-hadley-id="00f96f2a-c21a-4944-ab1b-21755a838d7d">H2 via Setext</h2>
+        <hr data-hadley-id="c678d6f7-4cbe-470a-b17a-3ed56ca2de25">
+        <h2 id="kritische-abweichung-ist-kein-italic" data-hadley-id="ab345dea-644e-4fe6-a3c5-da71e4cbc5be">
+          ⚠ Kritische Abweichung:
+          <code>_</code> ist kein Italic</h2>
+        <p data-hadley-id="c6b412e3-c916-4fa9-bc24-1c9429058725">Standard-Markdown kennt <code>_text_</code> als Kursivschrift. <abbr title="Hadley Markdown">HMD</abbr> nicht.</p>
+        <table data-hadley-id="d0509347-98d3-4d70-b6b0-71bfba42bd62">
+          <thead>
+            <tr>
+              <th>Syntax</th>
+              <th><abbr title="Hadley Markdown">HMD</abbr>-Ausgabe</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>_text_</code></td>
+              <td><code>&lt;sub&gt;</code> (Tiefstellung)</td>
+            </tr>
+            <tr>
+              <td><code>*text*</code></td>
+              <td><code>&lt;em&gt;</code> (Kursiv)</td>
+            </tr>
+          </tbody>
+        </table>
+        <p data-hadley-id="ed0b5028-ced7-409a-a0f6-cb468c7a1b05">Beispiele:</p>
+        <p data-hadley-id="3167b849-ec85-4f82-a91a-8e78fab1e1f0">H <sub>2</sub>O und CO <sub>2</sub> — Tiefstellung via <code>_</code>.</p>
+        <p data-hadley-id="95bc02c0-21a9-46dc-bfd0-bd38b9f7ba31"><em>Das ist kursiv</em> — <code>*text*</code> ist Kursiv.</p>
+        <p data-hadley-id="9158fd04-baa7-4881-b568-449fd47b7f48"><strong>Das ist fett</strong> — <code>**text**</code>.</p>
+        <p data-hadley-id="71bd8498-ba10-456d-9143-acb62f9017b7">In Standard-Markdown wäre auch <code>__text__</code> (doppelter Unterstrich) bold. In <abbr title="Hadley Markdown">HMD</abbr> nicht — <code>_</code> ist immer <code>&lt;sub&gt;</code>, auch doppelt:</p>
+        <p data-hadley-id="a4109a6f-bc1c-43e6-8b84-3c8f0175772a"><code>__strong__</code> → <code>&lt;sub&gt;&lt;/sub&gt;strong&lt;sub&gt;&lt;/sub&gt;</code> (kaputt, kein Bold)</p>
+        <hr data-hadley-id="c32e5f33-41f5-49c8-8107-09fce388900e">
+        <h2 id="inline-erweiterungen" data-hadley-id="d975e885-1229-499a-b701-d719f563ebde">Inline-Erweiterungen</h2>
+        <h3 id="hervorhebung-text" data-hadley-id="34517e5b-6b9f-4dce-b07d-387c24fb9b69">Hervorhebung <code>==text==</code></h3>
+        <p data-hadley-id="9725e1b7-1e38-4df7-97ed-2a42e8956025"><mark>Dieser Text ist hervorgehoben</mark> — <code>&lt;mark&gt;</code>.</p>
+        <p data-hadley-id="414f47f7-364f-4057-8b8b-2b2996b7dba1">Gemischt: <em>kursiv</em>, <strong>fett</strong>, <mark>markiert</mark>, <del>durchgestrichen</del>.</p>
+        <h3 id="hochstellung-text" data-hadley-id="b30b5f0a-8172-4906-9a04-a3f0fd76fe27">Hochstellung <code>^text^</code></h3>
+        <p data-hadley-id="267d8935-66dd-4d22-9a95-e2ca242721c0">Fläche: 42 m <sup>2</sup>. Fußnote im Fließtext: Einstein <sup>1</sup>.</p>
+        <h3 id="tiefstellung-text" data-hadley-id="31a5ab17-3a10-49b0-bb0a-680b88369004">Tiefstellung <code>_text_</code></h3>
+        <p data-hadley-id="f71e8643-5fd4-45de-bd5e-94732a275336">Wasser: H <sub>2</sub>O. Kohlendioxid: CO <sub>2</sub>. Methan: CH <sub>4</sub>.</p>
+        <h3 id="durchgestrichen-text" data-hadley-id="6fb82a3e-1dbd-42c6-9687-e9f2982e61af">Durchgestrichen <code>~~text~~</code></h3>
+        <p data-hadley-id="16045fd9-e844-4086-b403-1ede5f8023e8"><del>Dieser Text ist durchgestrichen</del> — <code>&lt;del&gt;</code>.</p>
+        <h3 id="inline-code-code" data-hadley-id="086c8ea3-dc41-4b09-a545-5eec29f14a48">Inline-Code <code></code> <code>code</code> <code></code>
+        </h3>
+        <p data-hadley-id="1e058bdb-857b-4398-ab8e-0ff0c7c44017">Variablenname <code>urlPath</code>, Befehl <code>hadley dev --build</code>, Typ <code>HmdResult</code> — <code>&lt;code&gt;</code>.</p>
+        <h3 id="harter-zeilenumbruch" data-hadley-id="84b9620d-4dd9-42d6-9ba3-429051d6e689">Harter Zeilenumbruch</h3>
+        <p data-hadley-id="d0c703db-3905-4b43-abbc-3fa958d0afb2">Zwei Leerzeichen am Zeilenende erzeugen <code>&lt;br&gt;</code>:</p>
+        <p data-hadley-id="c53042b2-372b-4a2b-9e27-e4970ee38c9f">Erste Zeile — danach zwei Leerzeichen
+          <br>Zweite Zeile direkt darunter.
+        </p>
+        <hr data-hadley-id="e66b3ff2-f476-4704-954b-0ed952d63914">
+        <h2 id="links" data-hadley-id="239c3338-ef15-4270-9b5a-2a49978949cb">Links</h2>
+        <p data-hadley-id="254119ae-e191-4d37-a303-b0b5aa02cc9b">
+          Einfacher Link:
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer">Hadley auf GitHub</a> — <code>[Text](url)</code>.</p>
+        <p data-hadley-id="189da2af-e405-4d5a-99d5-9166b44604b7">
+          Link mit Titel:
+          <a href="https://example.com" title="Titel erscheint als Tooltip" target="_blank" rel="noopener noreferrer">
+          Beispiel</a>.</p>
+        <hr data-hadley-id="a0136a3b-bd9c-4f0f-a90a-d9793e33d81c">
+        <h2 id="annotierter-link" data-hadley-id="8c34bb02-f1b1-48dc-9160-e2acb499158a">Annotierter Link</h2>
+        <p data-hadley-id="185c270c-9f67-430a-9e2f-26e47818d732"><code>{annotation}[Text](ziel)</code> fügt <code>data-annotation</code> hinzu und trägt den Link in <code>result.annotations</code> ein.</p>
+        <p data-hadley-id="fe6e8a09-2866-4e36-8852-5d6aaf97dc8d"><a href="beispiel.pdf" data-annotation="download">Beispiel-PDF herunterladen</a></p>
+        <p data-hadley-id="ba4d9b3b-1647-494e-9633-7b24b23e5511"><a href="https://example.com" data-annotation="external" target="_blank" rel="noopener noreferrer">
+          Externe Quelle</a>        </p>
+        <p data-hadley-id="d3d0d123-7709-4b68-8d13-ab92a9ab39e4">Annotationsname: <code>[a-z][a-z0-9-]*</code> — nur Kleinbuchstaben, Ziffern, Bindestriche.</p>
+        <hr data-hadley-id="cff3bc65-144a-4865-aada-56c07767bed2">
+        <h2 id="übersetzungs-link" data-hadley-id="5459a4b7-7c19-42f5-bd4b-59025b94eef4">Übersetzungs-Link</h2>
+        <p data-hadley-id="61be7fd1-9879-4c9c-90dc-b82b205795be"><code>[$page-id]($page-id)</code> wird zur Laufzeit aus <code>translationMappings</code> aufgelöst.</p>
+        <p data-hadley-id="3032473b-090c-4071-b47e-ef1d962d1191">Zur Startseite: <a href="/">$home</a></p>
+        <hr data-hadley-id="ba5e100c-38ae-4f64-ba5e-2f97f73dcbef">
+        <h2 id="bildgruppe" data-hadley-id="3e86a4bc-fef5-418a-868e-347bd914ff28">Bildgruppe</h2>
+        <p data-hadley-id="a1cfd6de-dcb0-49d5-8cf6-9d4fcb8cadc6"><code>{name}</code> allein auf einer Zeile, gefolgt von einer oder mehreren Bildzeilen — ohne Leerzeile dazwischen.</p>
+        <div class="image-group">
+          <figure>
+            <picture>
+              <source type="image/webp" srcset="img-800w.webp 800w" sizes="(max-width: 767px) calc(100vw - 2rem), 800px">
+              <img src="img-800w.webp" alt="Testbild" width="1280" height="720" loading="lazy" decoding="async">
+            </picture>
+            <figcaption>Testbild aus dem Bundle</figcaption>
+          </figure>
+          <figure>
+            <picture>
+              <source type="image/webp" srcset="foto-1-800w.webp 800w" sizes="(max-width: 767px) calc(100vw - 2rem), 800px">
+              <img src="foto-1-800w.webp" alt="Erstes Bild" width="1280" height="720" loading="lazy" decoding="async">
+            </picture>
+            <figcaption>Untertitel erstes Bild</figcaption>
+          </figure>
+          <figure>
+            <picture>
+              <source type="image/webp" srcset="foto-2-800w.webp 800w" sizes="(max-width: 767px) calc(100vw - 2rem), 800px">
+              <img src="foto-2-800w.webp" alt="Zweites Bild" width="1280" height="720" loading="lazy" decoding="async">
+            </picture>
+          </figure>
+          <figure>
+            <picture>
+              <source type="image/webp" srcset="foto-3-800w.webp 800w" sizes="(max-width: 767px) calc(100vw - 2rem), 800px">
+              <img src="foto-3-800w.webp" alt="Drittes Bild" width="1280" height="720" loading="lazy" decoding="async">
+            </picture>
+            <figcaption>Untertitel drittes Bild</figcaption>
+          </figure>
+        </div>
+        <p data-hadley-id="5889c9cc-d671-4f62-9939-13dc75c73db7">Ausgabe: <code>&lt;ImageGroup id="galerie"/&gt;</code> für das erste Bild. Alle Items landen in <code>result.imageGroups['galerie']</code>. Das Template rendert die Galerie-Komponente.</p>
+        <p data-hadley-id="1da94424-8d55-4b77-8859-7aa715d49e66">
+          Einzelbild standalone (kein Präfix → kein image-group):
+        </p>
+        <figure>
+          <picture>
+            <source type="image/webp" srcset="solo-800w.webp 800w" sizes="(max-width: 767px) calc(100vw - 2rem), 800px">
+            <img src="solo-800w.webp" alt="Einzelbild" width="1280" height="720" loading="lazy" decoding="async">
+          </picture>
+          <figcaption>Ein einzelnes Bild</figcaption>
+        </figure>
+        <p data-hadley-id="c54b616b-b88a-4423-a5d1-5bca6537dff2">Inline-Bild im Fließtext: Das Logo
+          <figure>
+            <picture>
+              <source type="image/webp" srcset="solo-800w.webp 800w" sizes="(max-width: 767px) calc(100vw - 2rem), 800px">
+              <img src="solo-800w.webp" alt="Alt-Text" width="1280" height="720" loading="lazy" decoding="async">
+            </picture>
+          </figure>erscheint mitten im Satz.</p>
+        <hr data-hadley-id="54dc5ea5-e807-4d3c-842f-a7c42563948d">
+        <h2 id="fußnoten-und-marginalnoten" data-hadley-id="2d341037-9cc6-4142-8d09-c76047e0cae7">
+          Fußnoten und Marginalnoten
+        </h2>
+        <h3 id="benannte-fußnote-mit-inline-verweis" data-hadley-id="f0180f04-6f71-4c48-8f4f-f5960818007b">
+          Benannte Fußnote mit Inline-Verweis
+        </h3>
+        <p data-hadley-id="0c91b40b-0ade-4496-98de-b7f89e08bcd0">
+          Text mit einer Fußnote
+          <a class="note-ref" id="note-wichtig-ref" href="#note-wichtig">wichtig</a> — der Inline-Verweis <code>[^wichtig]</code> erzeugt einen <code>&lt;a class="note-ref"&gt;</code>-Link.</p>
+        <aside class="note" id="note-wichtig" data-hadley-id="f85266a0-1fed-4e1d-9ee8-de1123064fcc"><a class="note-back" href="#note-wichtig-ref">wichtig</a>Das ist die zugehörige Fußnote. Sie wird als <code>&lt;aside class="note" id="note-wichtig"&gt;</code> gerendert.</aside>
+        <h3 id="nummerierte-fußnoten" data-hadley-id="dcaaf79e-7a46-4b8e-992c-a9ffcfb6ac81">Nummerierte Fußnoten</h3>
+        <p data-hadley-id="98e50f92-fc36-42e7-9a0d-2cd8c6711eb9">
+          Erster Verweis
+          <a class="note-ref" id="note-1-ref" href="#note-1">1</a>, zweiter Verweis <a class="note-ref" id="note-2-ref" href="#note-2">2</a>.</p>
+        <aside class="note" id="note-1" data-hadley-id="64d77956-abaa-4dc1-a15b-0923501a778d"><a class="note-back" href="#note-1-ref">1</a>Erste Fußnote.</aside>
+        <aside class="note" id="note-2" data-hadley-id="95fcfead-c2c8-4a13-9253-0ba0d97f2aa5"><a class="note-back" href="#note-2-ref">2</a>Zweite Fußnote mit <strong>Formatierung</strong> und einem <a href="https://example.com" target="_blank" rel="noopener noreferrer">Link</a>.</aside>
+        <h3 id="marginalnote-ohne-anker" data-hadley-id="ed2418b9-057d-4b98-9fa1-4b484b50d9da">
+          Marginalnote ohne Anker
+        </h3>
+        <aside class="note" data-hadley-id="baa3b0b4-8931-4740-b816-cdf9aa12ef43">
+          Eine Marginalnote ohne Label und ohne Sprung-Anker.
+          <code>[^]:</code> — kein <code>id</code>-Attribut, kein Verweis-Link.</aside>
+        <hr data-hadley-id="54e8412b-67be-4470-aedd-c0ca4400a0c3">
+        <h2 id="abkürzungen" data-hadley-id="396927e8-c0cb-4bef-8b3c-dfa8d3b4e91a">Abkürzungen</h2>
+        <p data-hadley-id="f8fd8c27-c9e2-4287-b418-c78f593d9de0"><code>*[Abk]: Definition</code> erzeugt keinen <abbr title="HyperText Markup Language">HTML</abbr>-Output direkt — die Abkürzungen landen in <code>result.abbreviations</code>. <code>applyAbbreviations()</code> setzt <code>&lt;abbr&gt;</code>-Tags im fertigen <abbr title="HyperText Markup Language">HTML</abbr> ein.</p>
+        <p data-hadley-id="bad96533-020a-466c-996f-efb1ad045d6e">Markdown, <abbr title="HyperText Markup Language">HTML</abbr> und <abbr title="Cascading Style Sheets">CSS</abbr> — diese drei Abkürzungen sind hier definiert.</p>
+        <hr data-hadley-id="ed9ae797-f2eb-44de-a121-5451864d0643">
+        <h2 id="definitionsliste" data-hadley-id="ce22ccf3-f280-443b-81af-bddd18de64a0">Definitionsliste</h2>
+        <dl data-hadley-id="d8fa90e6-41e0-47f3-954f-f7682ddca925">
+          <dt>Begriff</dt>
+          <dd>Definition des Begriffs.</dd>
+        </dl>
+        <dl data-hadley-id="3fa1317f-2673-45cd-892f-83a886a092a3">
+          <dt>Begriff mit mehreren Definitionen</dt>
+          <dd>Erste Definition.</dd>
+          <dd>Zweite Definition.</dd>
+        </dl>
+        <dl data-hadley-id="5ea267f5-d828-4dbd-9205-622f02114d98">
+          <dt><em>Begriff</em> mit Inline-Formatierung</dt>
+          <dd>Auch hier ist <strong>Formatierung</strong> erlaubt.</dd>
+        </dl>
+        <hr data-hadley-id="e7d945b3-46e5-495c-82e7-68bdddc802ca">
+        <h2 id="tabelle-ohne-ausrichtung" data-hadley-id="805917bf-6969-4539-881f-e667553eda3d">
+          Tabelle ohne Ausrichtung
+        </h2>
+        <p data-hadley-id="b3a6d4db-27d6-462a-b648-dd8fa712a7c7">Einfache Tabelle ohne Ausrichtungsmarker:</p>
+        <table data-hadley-id="ec95cf08-0781-4b30-b927-da54e1a46773">
+          <thead>
+            <tr>
+              <th>Spalte A</th>
+              <th>Spalte B</th>
+              <th>Spalte C</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Eins</td>
+              <td>Zwei</td>
+              <td>Drei</td>
+            </tr>
+            <tr>
+              <td>Alpha</td>
+              <td>Beta</td>
+              <td>Gamma</td>
+            </tr>
+          </tbody>
+        </table>
+        <h2 id="tabelle-mit-ausrichtung" data-hadley-id="7a4dc741-9c87-4fa7-b792-0ae409cbd4f1">
+          Tabelle mit Ausrichtung
+        </h2>
+        <p data-hadley-id="5bb7bd90-cc2a-40b7-adbb-e7b7cbefc8c4">Ausrichtung via <code>:---</code>, <code>:---:</code>, <code>---:</code> — wird als <code>data-align</code> am <code>&lt;th&gt;</code>/ <code>&lt;td&gt;</code> ausgegeben, kein Inline- <abbr title="Cascading Style Sheets">CSS</abbr>.</p>
+        <table data-hadley-id="653c2b9c-405e-47e0-88db-3534e05d92f9">
+          <thead>
+            <tr>
+              <th data-align="left">Linksbündig</th>
+              <th data-align="center">Zentriert</th>
+              <th data-align="right">Rechtsbündig</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-align="left">Eins</td>
+              <td data-align="center">Zwei</td>
+              <td data-align="right">Drei</td>
+            </tr>
+            <tr>
+              <td data-align="left">Alpha</td>
+              <td data-align="center">Beta</td>
+              <td data-align="right">Gamma</td>
+            </tr>
+          </tbody>
+        </table>
+        <hr data-hadley-id="c3edd1b4-69e7-47df-b004-d2465e136054">
+        <h2 id="listen" data-hadley-id="f7e4dcd2-4f8b-43a8-8f93-4fcfa6c0a774">Listen</h2>
+        <h3 id="ungeordnet-alle-drei-marker" data-hadley-id="3b67044d-dd13-4277-9946-00e8fe3de23f">
+          Ungeordnet — alle drei Marker (
+          <code>-</code>, <code>*</code>, <code>+</code>)</h3>
+        <ul data-hadley-id="ba7552b5-f680-47d8-8e67-476d1b29def2">
+          <li>Minus
+            <ul>
+              <li>Stern (eingerückt)
+                <ul>
+                  <li>Plus (tiefer eingerückt)</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <h3 id="geordnet" data-hadley-id="9c184b4d-6054-4566-a44d-0a71b11ab74c">Geordnet</h3>
+        <ol data-hadley-id="45030dce-1b67-40e9-b933-eea699ffbc7b">
+          <li>Erstes Element</li>
+          <li>Zweites Element</li>
+          <li>Drittes Element</li>
+        </ol>
+        <h3 id="verschachtelt-gemischt" data-hadley-id="19b377ee-2497-4735-a86e-36688c2aa5ab">
+          Verschachtelt (gemischt)
+        </h3>
+        <ul data-hadley-id="a9589311-a4bf-4fa5-9aa7-d1b6816d5835">
+          <li>Punkt A
+            <ol>
+              <li>Untergeordnet 1</li>
+              <li>Untergeordnet 2</li>
+            </ol>
+          </li>
+          <li>Punkt B
+            <ul>
+              <li>Noch tiefer
+                <ul>
+                  <li>Noch eine Ebene</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <hr data-hadley-id="a73172ff-c5ad-4509-9581-f15a657a05e1">
+        <h2 id="codeblöcke-mit-syntax-highlighting" data-hadley-id="0e43212d-f907-498f-8260-bb78d0126cb2">
+          Codeblöcke mit Syntax-Highlighting
+        </h2>
+        <pre data-hadley-id="5d629819-c6e2-4426-87e8-c7b067298be8" class="shiki nord sh-4" tabindex="0"><code><span class="line"><span class="sh-6">interface</span><span class="sh-5"> Article</span><span class="sh-3"> {</span></span>
+<span class="line"><span class="sh-8">  title</span><span class="sh-6">:</span><span class="sh-5"> string</span></span>
+<span class="line"><span class="sh-8">  date</span><span class="sh-6">:</span><span class="sh-5"> Date</span></span>
+<span class="line"><span class="sh-8">  tags</span><span class="sh-6">:</span><span class="sh-5"> string</span><span class="sh-8">[]</span></span>
+<span class="line"><span class="sh-3">}</span></span>
+<span class="line"></span>
+<span class="line"><span class="sh-6">const</span><span class="sh-0"> render</span><span class="sh-6"> =</span><span class="sh-3"> (</span><span class="sh-7">a</span><span class="sh-6">:</span><span class="sh-5"> Article</span><span class="sh-3">)</span><span class="sh-6">:</span><span class="sh-5"> string</span><span class="sh-6"> =></span></span>
+<span class="line"><span class="sh-3">  `</span><span class="sh-2">&#x3C;h1></span><span class="sh-3">${</span><span class="sh-7">a</span><span class="sh-3">.</span><span class="sh-7">title</span><span class="sh-3">}</span><span class="sh-2">&#x3C;/h1></span><span class="sh-3">`</span></span></code></pre>
+        <pre data-hadley-id="cadb0502-c57a-4413-82b0-47fa5bc0ee28" class="shiki nord sh-4" tabindex="0"><code><span class="line"><span class="sh-3">.</span><span class="sh-5">note</span><span class="sh-3"> {</span></span>
+<span class="line"><span class="sh-7">  border-inline-start</span><span class="sh-3">:</span><span class="sh-9"> 2</span><span class="sh-6">px</span><span class="sh-6"> solid</span><span class="sh-0"> oklch</span><span class="sh-3">(</span><span class="sh-9">70</span><span class="sh-6">%</span><span class="sh-9"> 0.15</span><span class="sh-9"> 250</span><span class="sh-3">)</span><span class="sh-6">;</span></span>
+<span class="line"><span class="sh-7">  padding-inline-start</span><span class="sh-3">:</span><span class="sh-9"> 1</span><span class="sh-6">rem;</span></span>
+<span class="line"><span class="sh-3">}</span></span></code></pre>
+        <pre data-hadley-id="0ff8fd15-0002-481a-b9b7-1c3caf0cf614" class="shiki nord sh-4" tabindex="0"><code><span class="line"><span class="sh-0">hadley</span><span class="sh-2"> dev</span><span class="sh-2"> --build</span></span>
+<span class="line"><span class="sh-0">bun</span><span class="sh-2"> test:marks</span></span></code></pre>
+        <pre data-hadley-id="32e656c3-c121-472a-b56b-7de7b1d30294" class="shiki nord sh-4" tabindex="0"><code><span class="line"><span class="sh-3">{</span></span>
+<span class="line"><span class="sh-3">  "</span><span class="sh-5">name</span><span class="sh-3">"</span><span class="sh-3">:</span><span class="sh-3"> "</span><span class="sh-2">marks</span><span class="sh-3">"</span><span class="sh-3">,</span></span>
+<span class="line"><span class="sh-3">  "</span><span class="sh-5">version</span><span class="sh-3">"</span><span class="sh-3">:</span><span class="sh-3"> "</span><span class="sh-2">0.1.0</span><span class="sh-3">"</span></span>
+<span class="line"><span class="sh-3">}</span></span></code></pre>
+        <p data-hadley-id="8f3a5a36-fff0-4916-9f74-d0a11ecdf1ea">Code-Block ohne Sprache (kein Highlighting):</p>
+        <pre data-hadley-id="3f9fcf25-7b28-42a7-82a0-12a246fc863f"><code>Einfacher Code-Block
+ohne Sprachen-Angabe.
+</code></pre>
+        <p data-hadley-id="a92d0dbb-37a1-479e-95e9-be96219b29f2">
+          Unbekannte Sprache — kein Crash, kein Highlighting:
+        </p>
+        <pre data-hadley-id="f10773c8-cda1-4731-ac62-1e8b88c55c92"><code>Das wird als plaintext ausgegeben.
+</code></pre>
+        <hr data-hadley-id="40d167ca-1abd-4f42-a5da-a87e69034500">
+        <h2 id="task-liste" data-hadley-id="97ea7612-9dbc-419a-ab33-7817a5bfc12e">Task-Liste</h2>
+        <ul data-hadley-id="e31ba1f7-bb99-45de-bb18-3bf7215e3974">
+          <li>
+            <input type="checkbox" disabled checked>Frontmatter extrahieren ( <code>matter</code>)</li>
+          <li>
+            <input type="checkbox" disabled checked>Markdown parsen ( <code>marks</code>)</li>
+          <li>
+            <input type="checkbox" disabled checked>Template rendern ( <code>chase</code>)</li>
+          <li>
+            <input type="checkbox" disabled>JSON-LD Partial</li>
+          <li>
+            <input type="checkbox" disabled>hems-Theme</li>
+        </ul>
+        <hr data-hadley-id="649271f9-305f-4065-9afb-79cea129ee33">
+        <h2 id="autolinks" data-hadley-id="fa7c4764-976c-439d-adb9-e7a078188f74">Autolinks</h2>
+        <p data-hadley-id="495ce87d-0140-4be9-b932-d4f0c67d3c82">
+          Bracketed:
+          <a href="https://example.com" target="_blank" rel="noopener noreferrer">https://example.com</a></p>
+        <p data-hadley-id="31073fd6-8bf5-4ce2-92f5-b82f3ee67496">E-Mail bracketed: <a href="mailto:user@example.com">user@example.com</a></p>
+        <p data-hadley-id="426ca9e2-f119-40a9-8bc5-46e5455eb79c">E-Mail bare (GFM): <a href="mailto:user@example.com">user@example.com</a></p>
+        <hr data-hadley-id="dc83168c-d162-4fa0-8819-9ec2d3cb5310">
+        <h2 id="blockquote" data-hadley-id="cf7f487e-0f8f-4db3-80b4-aeecfb2aaf41">Blockquote</h2>
+        <blockquote data-hadley-id="3cc76040-2755-4b47-984a-c334415a81bd">
+          <p>Zitierter Text über mehrere Zeilen. Zweite Zeile im selben Block.</p>
+        </blockquote>
+        <blockquote data-hadley-id="1fdd8f4f-5ff8-42ea-9ca1-418738e7d735">
+          <p>Verschachtelt:</p>
+          <blockquote>
+            <p>Inneres Zitat.</p>
+          </blockquote></blockquote>
+        <hr data-hadley-id="f7f5489c-c3f4-4dc6-b217-1cda5ffab849">
+        <h2 id="html-passthrough" data-hadley-id="fb633fad-7880-4fb7-bc01-e49dd35479d3"><abbr title="HyperText Markup Language">HTML</abbr>-Passthrough</h2>
+        <p data-hadley-id="cb989858-6a3c-4095-b35a-c40637a7188e">Inline- <abbr title="HyperText Markup Language">HTML</abbr> wird durchgereicht:</p>
+        <p data-hadley-id="89f79571-657e-434d-9a58-41a12c399599">Text mit <kbd>Ctrl</kbd>+ <kbd>S</kbd>.</p>
+        <p data-hadley-id="07dbb85f-5aad-4024-b238-44ef72887eed"><abbr title="HyperText Markup Language">HTML</abbr>-Kommentare werden stillschweigend entfernt:</p>
+        <p data-hadley-id="a4672146-4fe2-4100-b9e2-a7bd84dc89b2">Block- <abbr title="HyperText Markup Language">HTML</abbr> ebenfalls:</p>
+        <figure>
+          <figcaption>Eine Bildunterschrift via raw <abbr title="HyperText Markup Language">HTML</abbr>.</figcaption>
+        </figure>
+      </article>
+      <div class="comments-form-wrap">
+        <button id="comment-open-btn" type="button">Kommentar schreiben</button>
+        <p id="comment-success" role="status" hidden></p>
+        <dialog id="comment-dialog" 
+                aria-labelledby="comment-dialog-title" 
+                data-lang="de" 
+                data-article-id="hmd-testseite" 
+                data-service-url="https://localhost:9000" 
+                data-i18n-open-button="Kommentar schreiben" 
+                data-i18n-submit="Absenden" 
+                data-i18n-waiting="Bitte warten…" 
+                data-i18n-notify-label="Bitte benachrichtigt mich, wenn mein Kommentar veröffentlicht wird." 
+                data-i18n-privacy="Deine E-Mail-Adresse wird nicht veröffentlicht und nur intern für Rückfragen gespeichert." 
+                data-i18n-success="Danke für deinen Kommentar! Er wird nach redaktioneller Prüfung veröffentlicht." 
+                data-i18n-error-email="Bitte E-Mail-Adresse angeben (für Benachrichtigung erforderlich)." 
+                data-i18n-error-422="Der Sicherheits-Token ist ungültig oder abgelaufen. Bitte erneut versuchen." 
+                data-i18n-error-429="Zu viele Versuche. Bitte einige Minuten warten." 
+                data-i18n-error-503="Der Kommentar-Service ist vorübergehend nicht verfügbar." 
+                data-i18n-error-network="Netzwerkfehler. Bitte Verbindung prüfen.">
+          <form method="dialog" novalidate>
+            <h2 id="comment-dialog-title">Kommentar schreiben</h2>
+            <div class="field">
+              <label for="cf-name">Name</label>
+              <input id="cf-name" name="name" type="text" required autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="cf-email">E-Mail</label>
+              <input id="cf-email" name="email" type="email" autocomplete="email">
+            </div>
+            <div class="field">
+              <label for="cf-text">Kommentar</label>
+              <textarea id="cf-text" name="text" required rows="5"></textarea>
+            </div>
+            <div class="field field--checkbox">
+              <label>
+                <input name="notify" type="checkbox" value="true"><span data-i18n="notify-label"></span>
+              </label>
+            </div>
+            <p class="privacy" data-i18n="privacy"></p>
+            <p class="form-error" data-role="error" role="alert" hidden></p>
+            <div class="form-actions">
+              <button type="submit" data-i18n="submit" aria-disabled="true"></button>
+              <button type="button" data-dialog-close>Abbrechen</button>
+            </div>
+          </form>
+        </dialog>
+      </div>
+      <script type="module" src="/assets/js/comments.js"></script>
+    </main>
+  </div>
+  <footer class="site-footer" data-pagefind-ignore>
+    <div>
+      <nav class="footer-nav" aria-label="Seitennavigation">
+        <ul>
+          <li class="footer-nav-item"><a href="/">Startseite</a><span class="footer-sep" aria-hidden="true">&bull;</span></li>
+          <li class="footer-nav-item"><a href="/autor/">Wer schreibt hier?</a><span class="footer-sep" aria-hidden="true">&bull;</span></li>
+          <li class="footer-nav-item"><a href="/blogroll/" data-link-unpublished>Empfehlungen</a><span class="footer-sep" aria-hidden="true">&bull;</span></li>
+          <li class="footer-nav-item"><a href="/impressum/">Impressum</a><span class="footer-sep" aria-hidden="true">&bull;</span></li>
+          <li class="footer-nav-item"><a href="/datenschutz/">Datenschutz</a><span class="footer-sep" aria-hidden="true">&bull;</span></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="copyright"><span class="copyright-issn">ISSN 3055-1935</span> Copyright &copy; 2026 teblo.
+      <br>Built with ✧ hadley.
+    </div>
+  </footer>
+  <script src="/assets/js/toc.js"></script>
+  <script src="/assets/js/dev.js"></script>
+</body>
+
+</html>

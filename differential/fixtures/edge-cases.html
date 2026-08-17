@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="de">
+<head><meta charset="utf-8"><title>quad edge cases fixture</title></head>
+<body>
+
+<p>Text right after body with no leading whitespace in source.</p>
+
+<div><p>a</p><p>b</p><p>c</p></div>
+
+<p>Attribute value containing a literal '>' character: <span title="a > b">hover</span></p>
+<p>Attribute value containing a literal '&lt;' character: <span title="a &lt; b">hover</span></p>
+<p>Single-quoted value containing a double quote: <span title='say "hi"'>quoted</span></p>
+<p>Double-quoted value containing a single quote: <span title="it's fine">quoted</span></p>
+
+<custom-element   ></custom-element>
+<another-custom-element    />
+<br  >
+<img src="x.png" alt="y"  >
+<hr    />
+
+<div  class="a"   id="b"    data-x="1"  >spaced attributes</div>
+
+<p>Leading<em>no space before</em>and<em>no space after</em>trailing.</p>
+<p>Word<wbr>break<wbr>chain<wbr>test.</p>
+
+<ul><li>one</li><li>two</li><li>three</li></ul>
+<ol><li>first</li><li>second</li></ol>
+
+<blockquote>
+  <p>Original quote in another language.</p>
+</blockquote>
+<blockquote>
+  <p>Translated quote.</p>
+</blockquote>
+
+<figure>
+  <img src="photo.jpg" alt="a photo" width="800">
+  <figcaption>A caption with <a href="/src">a source link</a>.</figcaption>
+</figure>
+
+<script>
+if (a < b && c > d) {
+  const re = /a\/b/;
+  console.log("done");
+}
+</script>
+
+<SCRIPT TYPE="text/javascript">var uppercase = true;</SCRIPT>
+
+<style>
+  a[href^="http"] { color: blue; }
+  .a > .b ~ .c + .d { margin: 0; }
+</style>
+
+<STYLE>.upper { color: red; }</STYLE>
+
+<table>
+<tr><td colspan="2">merged</td></tr>
+<tr><td>1</td><td>2</td></tr>
+</table>
+
+<p>Trailing text after the last tag with no wrapping element</p>
+</body>
+</html>
+after-html-trailing-text

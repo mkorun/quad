@@ -1,0 +1,57 @@
+{
+	"name": "@mkorun/quad",
+	"version": "0.1.0",
+	"description": "quad — HTML formatter and normalizer for build pipelines",
+	"type": "module",
+	"author": "Michael Kortstiege <michael@mko.run>",
+	"license": "ISC",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/mkorun/quad.git"
+	},
+	"homepage": "https://github.com/mkorun/quad#readme",
+	"bugs": {
+		"url": "https://github.com/mkorun/quad/issues"
+	},
+	"engines": {
+		"node": ">=18.0.0"
+	},
+	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	},
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE",
+		"CHANGELOG.md"
+	],
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		}
+	},
+	"scripts": {
+		"test": "bun test",
+		"bench": "bun bench/performance.ts",
+		"build": "tsc",
+		"typecheck": "tsc --noEmit",
+		"prepublishOnly": "bun run typecheck && bun test && bun run build"
+	},
+	"keywords": [
+		"html",
+		"formatter",
+		"normalizer",
+		"pretty-print",
+		"build-pipeline",
+		"ssg",
+		"zero-dependency"
+	],
+	"devDependencies": {
+		"@types/bun": "^1.3.14",
+		"@types/js-beautify": "^1.14.3",
+		"js-beautify": "^2.0.3",
+		"typescript": "^5.0.0"
+	}
+}
