@@ -571,15 +571,22 @@ const htmlFmt = (html: string, options: HtmlFmtOptions = {}) => {
 		} else {
 			// Preserve raw content inside textarea, pre, script, style, svg — do not trim or reformat
 			const isRawContent = rawContentTags.has(prevTag) && prevTagType === 'opening'
+			// A text node that follows a rendering-sensitive boundary (an inline element's
+			// closing tag, or adjacent text) with no separating whitespace in the source
+			// must stay attached to the current line even when it wraps — a readability
+			// newline at that junction would render as a space that was never in the document.
+			let attachesDirectly = false
 			if (!isRawContent) {
 				const raw = str
+				const rawStartedWithWs = raw.length > 0 && isHtmlWsCode(raw.charCodeAt(0))
 				str = htmlTrim(str).replace(/  +/g, ' ')
 				prevTextTrailingWs = raw.length > 0 && isHtmlWsCode(raw.charCodeAt(raw.length - 1))
 				// Restore a single leading space after a rendering-sensitive boundary
 				// (htmlTrim() strips whitespace between </em>, an inline comment, etc. and the next word)
-				if (str && raw.length > 0 && isHtmlWsCode(raw.charCodeAt(0)) && prevBoundarySensitive) {
+				if (str && rawStartedWithWs && prevBoundarySensitive) {
 					str = ' ' + str
 				}
+				attachesDirectly = prevBoundarySensitive && !rawStartedWithWs
 			} else {
 				prevTextTrailingWs = false
 			}
@@ -651,6 +658,30 @@ const htmlFmt = (html: string, options: HtmlFmtOptions = {}) => {
 				} else {
 					out.push(str)
 				}
+			} else if (attachesDirectly) {
+				// The junction to the previous token had no whitespace in the source, so
+				// the first run of non-space characters must stay on the current line — a
+				// newline there would render as a space that was never in the document.
+				// Every break after the first real space is safe, so wrap the remainder
+				// normally at the block indent.
+				const flat = str.replace(/[\r\n]+/g, ' ').replace(/  +/g, ' ')
+				const firstSpace = flat.indexOf(' ')
+				if (firstSpace === -1) {
+					out.push(flat + '\n')
+				} else {
+					const rest = multilines(
+						[flat.slice(firstSpace + 1)],
+						pad(indentationCount).length,
+						lineWrap,
+					) ?? []
+					out.push(
+						flat.slice(0, firstSpace) +
+						'\n' + pad(indentationCount) +
+						rest.join('\n' + pad(indentationCount)) +
+						'\n'
+					)
+				}
+				singleLine = false
 			} else {
 				const content =
 					multilines(lines, pad(indentationCount).length, lineWrap) ?? []

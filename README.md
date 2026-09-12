@@ -336,8 +336,9 @@ bun test   # 139 tests: 131 unit tests + 8 differential/idempotency/extractor te
 | **namespaced tag names** | **`<svg:svg>` doesn't get truncated at `:` and mistaken for raw content** |
 | **whitespace before a block-ish sensitive tag** | **`button`, `label`, `svg`, custom elements — source space preserved without inventing one at a layout-only block boundary** |
 | **unencoded "<" in prose** | **`a < b` stays literal text instead of being misread as a tag and swallowing the rest of the document; genuine `< div>`/`</ div>` template-whitespace normalization still works** |
+| **wrapping text after an inline element** | **`<em>x</em>. Long sentence…` — a text node that wraps keeps its first unbroken run attached to the current line; the wrap newline is never introduced at a junction that had no source whitespace** |
 
-Bold rows were added after external pre-publish reviews found real bugs: the first found regressions in the previous regex-based tokenizer (quote-unaware `>` handling, the infinite loop, case-sensitive raw-content detection); a second review of the rewritten lexer found a namespaced-tag-name truncation bug and a whitespace-loss bug before non-inline sensitive tags. Each row's rewrite is what the corresponding test group now guards against regressing.
+Bold rows were added after external reviews found real bugs: the first found regressions in the previous regex-based tokenizer (quote-unaware `>` handling, the infinite loop, case-sensitive raw-content detection); a second review of the rewritten lexer found a namespaced-tag-name truncation bug and a whitespace-loss bug before non-inline sensitive tags; a downstream site review (0.1.3) found the wrapping path inventing a rendered space after an inline element. Each row's rewrite is what the corresponding test group now guards against regressing.
 
 ---
 

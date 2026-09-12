@@ -478,6 +478,42 @@ describe('htmlFmt — inline elements', () => {
 		expect(result).toContain('</strong> end.')
 	})
 
+	it('does not invent whitespace when wrapping text that follows an inline element (regression)', () => {
+		// The text-node "does not fit on one line" path unconditionally prefixed a
+		// newline + indent. After an inline closing tag with no separating whitespace
+		// in the source (e.g. "<em>x</em>. Long sentence…"), that newline renders as a
+		// space that was never in the document.
+		const input =
+			'<p>CommonMark standardises how Markdown is <em>read</em>. Markanto also standardises how it is <em>written</em>. Most Markdown tools are lenient both ways and re-serialise many ways, which is exactly the problem.</p>'
+		const result = htmlFmt(input, { lineWrap: 80 })
+		expect(result).not.toMatch(/<\/em>\n\s*\./)
+		expect(result).toContain('<em>written</em>.')
+		// the sentence remainder still wraps, just not at the junction
+		expect(result).toContain('\n')
+		expect(htmlFmt(result, { lineWrap: 80 })).toBe(result) // idempotent
+	})
+
+	it('keeps only the first unbroken token attached, then wraps the rest at the block indent', () => {
+		const input =
+			'<p>See <code>x</code>: one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen.</p>'
+		const result = htmlFmt(input, { lineWrap: 40 })
+		expect(result).toContain('<code>x</code>:')
+		expect(result).not.toMatch(/<\/code>\n\s*:/)
+		// remainder wrapped at the 2-space block indent, not ragged against the column
+		expect(result).toMatch(/\n {2}\S/)
+		expect(htmlFmt(result, { lineWrap: 40 })).toBe(htmlFmt(input, { lineWrap: 40 }))
+	})
+
+	it('still renders a real source space when text after an inline element wraps', () => {
+		// "<em>x</em> and…" — the space before "and" is in the source, so a newline
+		// there is correct (it renders as that one space).
+		const input =
+			'<p>word <em>x</em> and then a very long run of additional words that must wrap onto the next line somewhere.</p>'
+		const result = htmlFmt(input, { lineWrap: 60 })
+		expect(result).toMatch(/<\/em>(\n\s*| )and/)
+		expect(htmlFmt(result, { lineWrap: 60 })).toBe(result)
+	})
+
 	it('inline elements do not increase indentation depth', () => {
 		const result = htmlFmt('<div><p>Text <span>inline</span> more.</p></div>')
 		// <p> is at depth 1, content at same depth — no extra indent from <span>

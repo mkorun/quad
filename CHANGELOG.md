@@ -3,6 +3,21 @@
 All notable changes to `quad` are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.1.3] — 2026-09-10
+
+### Fixed
+
+- **Wrapping a text node that follows an inline element could invent a rendered
+  space.** When a text node was long enough to wrap and it followed an inline
+  element's closing tag with no separating whitespace in the source
+  (`<em>x</em>. Long sentence…`), the multi-line text path unconditionally
+  prefixed a newline + indent — and `</em>\n  .` renders as `</em> .`, a space
+  that was never in the document. Now the first unbroken run of characters
+  stays attached to the current line (matching the single-line path and the
+  existing "does not invent whitespace" guarantees for the non-wrapping cases);
+  only the remainder wraps, at the block indent. Output stays idempotent.
+  Three regression tests added.
+
 ## [0.1.2] — 2026-08-17
 
 ### Fixed
