@@ -940,25 +940,32 @@ describe('htmlFmt — unencoded "<" in prose does not corrupt the rest of the do
 		expect(result).toBe('<p>Wert < 5 und < weiter Text</p>\n<p>after</p>')
 	})
 
-	it('still normalizes a genuine "< div>" template whitespace artifact', () => {
-		expect(htmlFmt('< div>x</div >')).toBe('<div>x</div>')
+	it('leaves "< div>" and "</ div>" as they are: to a browser they are text and a comment', () => {
+		expect(htmlFmt('<p>a < b> c</p>')).toBe('<p>a < b> c</p>')
+		expect(htmlFmt('<div>x</ p>y</div>')).toBe('<div>x</ p>y</div>')
+		expect(htmlFmt('<title>a</ title>b</title>')).toBe('<title>a</ title>b</title>')
 	})
 
-	it('still normalizes a genuine "</ div>" closing-tag whitespace artifact', () => {
-		expect(htmlFmt('<div>x</ div>')).toBe('<div>x</div>')
+	it('still cleans the space before the > of a tag', () => {
+		expect(htmlFmt('<div >x</div >')).toBe('<div>x</div>')
+	})
+
+	it('reads whitespace around = as a browser does', () => {
+		expect(htmlFmt('<p title = "x data-b=1">y</p>')).toBe('<p title="x data-b=1">y</p>')
+		expect(htmlFmt('<p title ="x">y</p>')).toBe('<p title="x">y</p>')
+		expect(htmlFmt('<p title= "x">y</p>')).toBe('<p title="x">y</p>')
+		expect(htmlFmt('<input disabled value="a">')).toContain('disabled value="a"')
+	})
+
+	it('keeps a quote in a value without quotes inside that value', () => {
+		expect(htmlFmt('<p title=a"data-b="1>y</p>')).toBe('<p title="a&quot;data-b=&quot;1">y</p>')
 	})
 
 	it('does not treat "<" inside a quoted attribute value as a stray tag start', () => {
 		expect(htmlFmt('<div title="a < b">x</div>')).toBe('<div title="a < b">x</div>')
 	})
 
-	// Documents a known, remaining gap (see README "Known Limitations") rather than desired
-	// behavior: an unquoted ">" before the next "<" is read as the tag's own closing ">", so the
-	// bailout never triggers and a real <b> (bold) tag gets fabricated from plain prose. Locked in
-	// here so a future change to this doesn't silently alter it without the README being updated.
-	it('KNOWN GAP: an unquoted ">" before the next "<" still fabricates a tag', () => {
-		const result = htmlFmt('<p>a < b > c</p><p>after</p>')
-		expect(result).toBe('<p>a <b> c</p>\n<p>after</p>')
+	it('leaves "a < b > c" as text, since no tag starts with a space', () => {
+		expect(htmlFmt('<p>a < b > c</p><p>after</p>')).toBe('<p>a < b > c</p>\n<p>after</p>')
 	})
-
 })

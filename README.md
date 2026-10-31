@@ -197,10 +197,11 @@ Attribute names are intentionally not lowercased — SVG attributes like `viewBo
 
 Whitespace artifacts from template rendering are cleaned up before formatting:
 
-- `< div>` → `<div>` (space after `<`)
 - `<div >` → `<div>` (space before `>`)
 
-If a second, unquoted `<` turns up before the tag's own closing `>` (e.g. an unencoded `<` in prose like `a < b</p>`), quad backs off and treats the original `<` as literal text instead of speculatively swallowing everything up to some unrelated later `>`. This bailout narrows the ambiguity but doesn't remove it — see [Known Limitations](#known-limitations) for the cases it doesn't catch.
+`< div>` and `</ div>` stay as they are: a browser reads them as text and as a comment, not as tags.
+
+If a second, unquoted `<` turns up before the tag's own closing `>` (e.g. an unencoded `<` in prose like `a <b</p>`), quad backs off and treats the original `<` as literal text instead of speculatively swallowing everything up to some unrelated later `>`. This bailout narrows the ambiguity but doesn't remove it — see [Known Limitations](#known-limitations) for the cases it doesn't catch.
 
 ---
 
@@ -236,7 +237,7 @@ Prettier is intentionally not benchmarked — it has no synchronous API, ships ~
 - **Nested same-name raw blocks** (e.g. a string literal containing the text `</script>` inside a `<script>` element) end the block at that first occurrence — this matches how browsers actually tokenize HTML (`<script>` content is not parsed for further tags, the first literal `</script>` always ends it), so it's spec-correct behavior, not a quad-specific quirk.
 - **Comment contents are not reformatted.** A multi-line `<!-- ... -->` block is emitted as one unit with its original internal line breaks and indentation kept exactly as written. Comments between inline content stay attached so they cannot introduce or remove visible word spacing; comments in block layout may be repositioned with the surrounding indentation.
 - **`<script>`/`<style>`/`<svg>` inner content is excluded from the automated comparison against js-beautify** (see `differential/`) — js-beautify actively restructures JS/CSS and reformats SVG markup, while quad deliberately treats these blocks as opaque. Element structure and attributes are still compared; quad's own raw-content preservation contract is covered directly by unit tests.
-- **An unencoded `<` immediately followed by a letter in prose can still be misread as a tag start — the stray-`<` bailout (see [Fix tags](#fix-tags)) narrows this, it doesn't eliminate it.** Two cases remain: (1) a bare `<` + letter with *no other tag anywhere in the rest of the input* never triggers the bailout, since there's no second `<` for it to find (`a < b` → `a <b`); (2) an unquoted `>` appearing before the next `<` is read as that tag's own closing `>`, so `a < b > c` becomes `a <b> c` — a real, recognized `<b>` (bold) tag gets fabricated, not just an unterminated one. Both require unencoded `<`/`>` in prose text, which valid HTML avoids (`&lt;`/`&gt;` are the correct encodings); real documents also almost always have further markup after any given point, which is what the bailout relies on. Not something observed in quad's own test corpus, but a real gap in the heuristic, not just a theoretical one.
+- **A `<` right before a letter is a tag start, as it is for a browser.** Encode a `<` in prose as `&lt;`. The stray-`<` bailout (see [Fix tags](#fix-tags)) keeps such a `<` as text when a second `<` follows before any `>`, but `a <b > c` is a tag to quad and to a browser alike. A `<` before a space or a digit is text.
 
 ---
 

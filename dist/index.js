@@ -58,16 +58,10 @@ const htmlTrim = (s) => {
 // lexer already resolved the tag's true (quote-aware) boundaries before this runs. The trailing
 // scan deliberately walks across all whitespace before "/>" so "<br  />" becomes "<br />".
 const cleanTagText = (text) => {
-    const c1 = text.charCodeAt(1);
-    const afterIdx = c1 === 47 /* '/' */ ? 2 : 1;
-    const needsLeadingFix = isWsCode(text.charCodeAt(afterIdx));
     const needsTabFix = text.indexOf('\t') !== -1;
     let result = text;
     if (needsTabFix)
         result = result.replace(/\t/g, '  ');
-    if (needsLeadingFix) {
-        result = c1 === 47 ? result.replace(/^<\/\s+/, '</') : result.replace(/^<\s+/, '<');
-    }
     const end = result.length - 1;
     if (end < 0 || result.charCodeAt(end) !== 62 /* '>' */)
         return result;
@@ -137,16 +131,11 @@ const tokenize = (html) => {
             textStart = i;
             continue;
         }
-        // Tolerate whitespace after '<' or '</' before the real tag name ("< div>", "< /div>")
+        // A tag name follows '<' or '</' at once: to a browser, "< div>" is text and "</ div>" a comment
         let p = i + 1;
-        while (p < len && isWsCode(html.charCodeAt(p)))
-            p++;
         const isClosing = html.charCodeAt(p) === 47; /* '/' */
-        if (isClosing) {
+        if (isClosing)
             p++;
-            while (p < len && isWsCode(html.charCodeAt(p)))
-                p++;
-        }
         if (!isLetterCode(html.charCodeAt(p))) {
             // Not a real tag start (e.g. a bare '<' in text) — treat as literal, keep scanning
             i++;
@@ -158,8 +147,8 @@ const tokenize = (html) => {
         const tagName = html.slice(p, j).toLowerCase();
         // Scan to the real (unquoted) '>' — quotes inside the tag hide '>' from ending it. A
         // second, unquoted '<' before that '>' means this was never a real tag to begin with
-        // (e.g. "a < b" in prose, matched here because whitespace-then-letter after the first
-        // '<' looks like a tag start — see the tolerance above). A genuine tag's own markup
+        // (e.g. "a <b" in prose, where a letter right after the first '<' looks like a tag
+        // start). A genuine tag's own markup
         // never contains a literal, unquoted '<' before its closing '>'; a real HTML tokenizer
         // doesn't speculatively commit past a second stray '<' either. Bailing out here (instead
         // of swallowing everything up to some unrelated later '>') is what keeps this from
@@ -267,10 +256,16 @@ const normalizeTagAttrs = (str) => {
         }
         out += str.slice(i, j);
         i = j;
-        if (i >= len || str.charCodeAt(i) !== CH_EQ)
+        // whitespace around '=' belongs to neither the name nor the value
+        let k = i;
+        while (k < len && str.charCodeAt(k) === CH_SP)
+            k++;
+        if (k >= len || str.charCodeAt(k) !== CH_EQ)
             continue;
+        i = k + 1;
+        while (i < len && str.charCodeAt(i) === CH_SP)
+            i++;
         out += '=';
-        i++;
         const q = str.charCodeAt(i);
         if (q === CH_DQ) {
             j = i + 1;
@@ -294,7 +289,7 @@ const normalizeTagAttrs = (str) => {
                     break;
                 j++;
             }
-            out += '"' + str.slice(i, j) + '"';
+            out += '"' + str.slice(i, j).replace(/"/g, '&quot;') + '"';
             i = j;
         }
     }

@@ -3,6 +3,16 @@
 All notable changes to `quad` are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.1.4] — 2026-10-31
+
+### Fixed
+
+- **`< b>` and `</ p>` became a tag and an end tag.** A browser reads them as text and as a comment, so the formatter
+  turned text into markup and could end an element early. They now stay as they are. This drops the tolerance for
+  `< div>` from template whitespace.
+- **Whitespace around `=` emptied the value.** `<p title = "x data-b=1">` gave `title=""` and an attribute `data-b`.
+- **A quote in an unquoted value ended it.** `<p title=a"data-b="1>` gave two attributes; the quote is now `&quot;`.
+
 ## [0.1.3] — 2026-09-10
 
 ### Fixed
