@@ -307,7 +307,7 @@ This matters if you ever run quad somewhere that specifically requires RE2 synta
 ## Tests
 
 ```bash
-bun test   # 139 tests: 131 unit tests + 8 differential/idempotency/extractor tests
+bun test   # 147 tests: 139 unit tests + 8 differential/idempotency/extractor tests
 ```
 
 | Group | Coverage |
