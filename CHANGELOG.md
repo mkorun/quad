@@ -3,6 +3,16 @@
 All notable changes to `quad` are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Fixed
+
+- **Wrapping a text node that runs into an inline element could invent a rendered space.** A long text that ended
+  without whitespace in the source before an inline opening tag (`(<a href="…">`, `pre<em>`) was ended with a newline,
+  which renders as a space: `( note` instead of `(note`. 0.1.3 kept a text's start attached to an inline element before
+  it; its end now stays attached to an inline element after it. `<br>` keeps its structural line break. Output stays
+  idempotent. Three regression tests added.
+
 ## [0.1.4] — 2026-10-31
 
 ### Fixed

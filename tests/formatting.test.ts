@@ -504,6 +504,34 @@ describe('htmlFmt — inline elements', () => {
 		expect(htmlFmt(result, { lineWrap: 40 })).toBe(htmlFmt(input, { lineWrap: 40 }))
 	})
 
+	it('does not invent whitespace when wrapped text runs into an inline element (regression)', () => {
+		// The multi-line text paths ended with a newline unconditionally. Before an inline opening tag
+		// with no separating whitespace in the source ("(<a>…", "pre<em>…"), that newline renders as a
+		// space that was never in the document: "( My note" instead of "(My note".
+		const input =
+			'<p>Debian\'s udev rules hand kvm to whoever sits at the seat, and each new VM makes udev reapply that rule. <strong>Use the group.</strong> (<a href="https://github.com/superradcompany/microsandbox/issues/920#issuecomment-6448133464" target="_blank" rel="noopener noreferrer">My note on the cause</a>.)</p>'
+		const result = htmlFmt(input, { lineWrap: 80 })
+		expect(result).toContain('(<a href=')
+		expect(result).not.toMatch(/\(\s+<a /)
+		expect(htmlFmt(result, { lineWrap: 80 })).toBe(result) // idempotent
+	})
+
+	it('keeps a word glued to an inline element that follows it when the text wraps', () => {
+		const input =
+			'<p>one two three four five six seven eight nine ten eleven twelve thirteen pre<em>joined</em>post and more words after it.</p>'
+		const result = htmlFmt(input, { lineWrap: 40 })
+		expect(result).toContain('pre<em>joined</em>post')
+		expect(htmlFmt(result, { lineWrap: 40 })).toBe(result)
+	})
+
+	it('still breaks before an inline element when the source has a space there', () => {
+		const input =
+			'<p>one two three four five six seven eight nine ten eleven twelve thirteen fourteen <em>x</em> end.</p>'
+		const result = htmlFmt(input, { lineWrap: 40 })
+		expect(result).toMatch(/fourteen(\n\s*| )<em>x<\/em>/)
+		expect(htmlFmt(result, { lineWrap: 40 })).toBe(result)
+	})
+
 	it('still renders a real source space when text after an inline element wraps', () => {
 		// "<em>x</em> and…" — the space before "and" is in the source, so a newline
 		// there is correct (it renders as that one space).
