@@ -674,6 +674,16 @@ const htmlFmt = (html, options = {}) => {
                 }
                 continue;
             }
+            // The same at the text's end: a text that ends without whitespace in the source runs straight
+            // into a whitespace-sensitive opening tag after it ("(<a>", "pre<em>"); a readability newline
+            // before that tag would render as a space that was never in the document. <br> keeps its
+            // structural line break.
+            const next = parts[i + 1] ?? '';
+            const nextOpens = next.startsWith('<') && !next.startsWith('</') && !next.startsWith('<!');
+            const nextName = nextOpens ? (next.match(/[A-Za-z][A-Za-z0-9-]*/)?.[0]?.toLowerCase() ?? '') : '';
+            const end = !isRawContent && !prevTextTrailingWs && nextName !== 'br' && isWhitespaceSensitiveTag(nextName)
+                ? ''
+                : '\n';
             const lines = str.split(/\r?\n/g);
             if (lines.length == 1 &&
                 prevIndentLength +
@@ -702,14 +712,14 @@ const htmlFmt = (html, options = {}) => {
                 const flat = str.replace(/[\r\n]+/g, ' ').replace(/  +/g, ' ');
                 const firstSpace = flat.indexOf(' ');
                 if (firstSpace === -1) {
-                    out.push(flat + '\n');
+                    out.push(flat + end);
                 }
                 else {
                     const rest = multilines([flat.slice(firstSpace + 1)], pad(indentationCount).length, lineWrap) ?? [];
                     out.push(flat.slice(0, firstSpace) +
                         '\n' + pad(indentationCount) +
                         rest.join('\n' + pad(indentationCount)) +
-                        '\n');
+                        end);
                 }
                 singleLine = false;
             }
@@ -718,7 +728,7 @@ const htmlFmt = (html, options = {}) => {
                 out.push('\n' +
                     pad(indentationCount) +
                     content.join('\n' + pad(indentationCount)) +
-                    '\n');
+                    end);
                 singleLine = false;
             }
             prevIndentLength = pad(indentationCount).length;
