@@ -1,6 +1,13 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/mkorun/quad/main/assets/logo-dark.svg">
+    <img src="https://raw.githubusercontent.com/mkorun/quad/main/assets/logo-light.svg" alt="" width="96" height="96">
+  </picture>
+</p>
+
 # quad — HTML Formatter & Normalizer
 
-Context-aware HTML formatter and normalizer for build pipelines. Takes raw HTML from template engines and produces consistently indented, HTML5-normalized markup, without altering DOM-relevant content (elements, attributes, text, comments).
+Context-aware HTML formatter and normalizer for build pipelines. Takes raw HTML from template engines and produces consistently indented, HTML5-normalized markup that a browser reads as the same document: the DOM is equal up to whitespace that does not render, and the rendered text is equal. [The contract](#the-contract) says exactly what may change.
 
 **Synchronous. Zero dependencies. ESM-only. Formats and normalizes.** Most sync, zero-dependency HTML tools only format (pretty-print); quad also normalizes to HTML5 conventions (void-element syntax, attribute quoting, tag-name case) — see [Design scope](#design-scope) for how it compares to js-beautify and Prettier.
 
@@ -29,12 +36,12 @@ import type { HtmlFmtOptions } from '@mkorun/quad'
 
 interface HtmlFmtOptions {
   indentation?: string    // indent string per level (default: '  ')
-  lineWrap?: number       // max line length before attributes wrap (default: 120)
+  lineWrap?: number       // line length at which text and attributes wrap (default: 120)
   stripComments?: boolean // remove HTML comments from output (default: false)
 }
 ```
 
-`stripComments: true` removes all `<!-- … -->` comments from the output. Useful for production builds where comments (build markers, template notes, etc.) should not be sent to the browser. Has no effect on `<script>`, `<style>`, or `<pre>` content.
+`stripComments: true` removes the `<!-- … -->` comments from the output. Useful for production builds where comments (build markers, template notes, etc.) should not be sent to the browser. It leaves verbatim content alone (`<script>`, `<style>`, `<pre>`, `<svg>`, …) and keeps the rare comment whose removal would create markup; see [C: `stripComments`](#c-stripcomments).
 
 ---
 
@@ -67,21 +74,174 @@ const minified  = htmlMin(htmlFmt(rawHtml)) // production output
 
 For structurally valid input, quad's output remains valid HTML5 and works as input for HTML
 minifiers. Malformed or unbalanced input is tolerated without hanging or throwing, but quad is a
-formatter/normalizer, not an HTML validator or structural repair tool.
+formatter/normalizer, not an HTML validator or structural repair tool: what it cannot read as a
+regular tag it copies, and it repairs nothing.
 
 Two deliberate style choices that differ from Prettier and js-beautify:
 
-**Closing block tags stay with their content.** When all content fits on one line, the closing tag stays at the end — `<p>Some <strong>bold</strong> text.</p>` rather than putting `</p>` on its own line. Compact and unambiguous.
+**Closing block tags stay with their content.** When all content fits on one line with both tags, the closing tag stays at the end — `<p>Some <strong>bold</strong> text.</p>` rather than putting `</p>` on its own line. Compact and unambiguous.
 
 **Text content is word-wrapped** at `lineWrap` (default 120 characters). Prettier leaves prose on a single line and lets browsers reflow; quad targets readability of the build artifact.
 
 ---
 
-## Features
+## The contract
 
-### Pretty formatting
+quad's output is its input with three kinds of change and no other:
 
-Indents nested elements, collapses whitespace inside tags, normalizes self-closing syntax:
+- **T**: inside a *regular* tag, the spelling of the tag;
+- **W**: whitespace between tokens, where a browser with the HTML standard's default stylesheet renders the same with
+  or without it;
+- **C**: with `stripComments`, comments are removed.
+
+Every other byte is copied: text characters, attribute names and values, comments, and everything inside verbatim
+content.
+
+No formatter that indents can leave the DOM untouched, since every line break it adds is a text node. What quad
+promises, and what its tests check in a browser, is: **the DOM is equal up to whitespace that does not render, and the
+rendered text is equal.** The reference is the default stylesheet. CSS of the page that changes `display` or
+`white-space` is outside the contract.
+
+### How quad reads
+
+quad reads tokens as the HTML tokenizer does, never as the author may have meant them.
+
+- `<` before an ASCII letter starts a start tag, `</` before a letter an end tag.
+- `<!--` starts a comment that ends at `-->` or `--!>`; `<!-->` and `<!--->` are whole comments.
+- `<!doctype` (any case) runs to the first `>`.
+- `<!…`, `<?…` and `</` before anything but a letter run to the first `>`, as the comments a browser makes of them
+  (of `<?x …>` Chromium 156 makes a processing instruction, with the same end).
+- Any other `<` is text. Encode a `<` in prose as `&lt;`: `a <b > c` holds a tag for quad and for a browser alike.
+- A tag name runs to whitespace, `/` or `>`. A quote opens a value only after `=`.
+- Whitespace in a tag is space, tab, line feed, form feed and carriage return. In text the form feed is a character.
+
+Tree construction is not part of it: quad does not know which start tag ends which element or where a browser
+moves misnested content. See [Known limitations](#known-limitations).
+
+### T: the spelling of a tag
+
+A tag is **regular** when all of these hold:
+
+- its name is ASCII letters, digits, `-` and `:`;
+- each attribute is preceded by whitespace;
+- attribute names contain no `"`, `'` or `<` and do not start with `=`;
+- each value is `"…"`, `'…'`, or unquoted, non-empty and without `"`, `'`, `<`, `=` and `` ` ``;
+- `/` occurs only directly before `>`;
+- an end tag has no attributes and no `/`.
+
+In a regular tag quad
+
+- lowercases the tag name: `<DIV>` → `<div>`;
+- writes one space between attributes, or a line break and alignment in a tag longer than `lineWrap`;
+- drops whitespace around `=` and before `>`: `<div  class = "a"  >` → `<div class="a">`;
+- writes every value in double quotes, with `"` → `&quot;` in a value that was in single quotes:
+  `<input type='text' maxlength=100>` → `<input type="text" maxlength="100">`;
+- drops the `/` of a void element and writes ` />` elsewhere: `<br />` → `<br>`, `<path d="M0 0"/>` → `<path d="M0 0" />`.
+
+Attribute names and values are never touched: not their case (`viewBox`), not a tab or line break inside a value. An
+attribute without a value stays without one.
+
+A tag that is not regular is copied byte for byte, and its name still decides its category: `<p title=a"b>`,
+`<a href="x"class="y">` and `<br/ >` come out as they went in.
+
+`/>` closes an element only on `svg` and `math`. On any other element that is not void a browser ignores it, and so
+does quad: `<script/>` opens a script.
+
+### W: whitespace between tokens
+
+Between two neighbouring tokens there is nothing, a space (whitespace without a line break) or a line break.
+
+- **Free**: directly next to a block tag, and at the start and the end of the input, quad creates, removes and
+  reshapes whitespace. Comments, a doctype and whole metadata elements between that place and the block tag do not
+  count, since they render nothing. Emptiness is kept: an element without content gets none (`<div></div>` stays,
+  however long its start tag), and content that is only whitespace stays whitespace (`<div> </div>` becomes
+  `<div>`, a line break, `</div>`).
+- **Kept**: everywhere else
+  - nothing stays nothing;
+  - a line break stays a line break, indented anew;
+  - a space stays a space, or becomes a line break where the line would pass `lineWrap`. It stays a space after
+    `<wbr>`, next to U+200B and between two characters from U+1100 on (among them the East Asian wide ones), where a
+    browser may render a line break as nothing. Numeric character references and the common names `lt`, `gt`,
+    `amp`, `quot`, `apos` and `nbsp` count as their decoded characters. A semicolon is optional only for `lt`,
+    `gt`, `amp`, `quot`, `nbsp`. Next to any other named reference quad conservatively keeps the space, including
+    the five names for U+200B. An encoded space, tab, LF, CR or FF at a word's edge also keeps the neighbouring
+    space: it collapses with that space, so the character beyond it may decide how a line break renders.
+- **Verbatim content**: nothing changes.
+
+`lineWrap` is a target, not a bound: a line without a place to break stays long.
+
+### The elements
+
+Every name that is not listed is **inline**, also unknown and custom elements.
+
+| Category | Elements | Around its tags | Content |
+|---|---|---|---|
+| Block | `address article aside blockquote body caption center col colgroup dd details dialog dir div dl dt fieldset figcaption figure footer form frame frameset h1`–`h6 head header hgroup hr html legend li main menu nav ol optgroup option p search section summary table tbody td tfoot th thead tr ul` | free | formatted |
+| Inline (default) | all others: `a span code em label button input img select picture source video audio canvas object slot template ruby rt rp br wbr`, `my-element`, … | kept | formatted |
+| Metadata | `base link meta script style title` | kept; a line of its own where the whitespace is free or there is a space | see the next rows |
+| Escapable raw text | `title`, `textarea` | by its own category (`textarea` is inline) | verbatim up to `</name` before whitespace, `/` or `>` |
+| Raw text | `script style xmp iframe noembed noframes noscript`; `plaintext` to the end of the input | by its own category (`xmp` and `plaintext` are blocks, the others inline) | verbatim, with the same end; in `script`, a `</script>` between `<!--`, `<script` and `-->` does not end it, as in a browser |
+| `pre`, `listing` | | free (block) | verbatim up to the matching end tag, counting nested elements of the same name; the line break after the start tag is neither added nor removed |
+| Foreign | `svg`, `math` | kept (inline) | verbatim up to the matching end tag, read as foreign content (below); the start tag is rewritten by T, nothing inside is |
+| Void | `area base br col embed hr img input link meta source track wbr` | by its own category | none |
+| Comment, doctype | | kept; neither counts where whitespace is free | verbatim; of a doctype quad lowercases the word `doctype` |
+
+The end of verbatim content is found with the same reader: a comment, a quoted value or raw text inside hides a
+`</pre>` or `</svg>`. Inside, quad reads in one of the two ways a browser does:
+
+- **as HTML** in `pre` and `listing`: raw text (`textarea`, `script`, …) hides everything up to its own end tag, and
+  an `svg` or `math` holds foreign content;
+- **as foreign content** in `svg` and `math`: there is no raw text, `/>` closes an element, and the content of an
+  integration point is HTML again. These are `foreignObject`, `desc` and `title` of SVG and `mi`, `mo`, `mn`, `ms`,
+  `mtext` and `annotation-xml` of MathML. `<![CDATA[…]]>` is skipped everywhere inside `svg` and `math`.
+
+quad finds the end of verbatim content and the place of `<head>` and `<body>` from tokens, without the tree a
+browser builds. Where it sees that the two can disagree, it returns the whole input unchanged: no tag
+normalization, whitespace formatting or comment removal, also before that place, also with `stripComments`.
+It sees two cases:
+
+- **A crossed region.** Inside verbatim content, an end tag that names an open outer region while an inner region
+  is open: `<pre><svg></pre>`. End tags in comments, quoted values, CDATA sections and raw text are not seen.
+- **A misplaced document tag.** `<head>` or `</head>` after body content; `<body>` after body content; after
+  `</body>`, text or any tag but `</html>`. Body content is `<body>`, text outside `<head>…</head>`, and a start tag
+  outside it other than `<html>`, `<head>`, `base`, `link`, `meta`, `script`, `style` and `title`. A leading U+FEFF
+  byte order mark is not body content and stays at the start of the formatted output.
+
+An over-long verbatim region can make what follows it format in the wrong place. This check is no tree repair
+and is exact in neither direction. It keeps some properly nested input unchanged: an element in an integration
+point with the name of an open outer region (`<pre><svg><foreignObject><pre>`), and `<template>` or `<noscript>`
+before `<body>` where the head tags are omitted. Misnested input it does not see stays outside the contract;
+see [Known limitations](#known-limitations).
+
+### Input that ends early
+
+If the input ends inside a tag, a comment, a raw text or verbatim element, or after `<plaintext>`, the rest from that
+construct's `<` is copied unchanged, and no option touches it. quad does not report this.
+
+### C: `stripComments`
+
+`stripComments: true` removes every terminated `<!--…-->` comment outside verbatim content. The whitespace on both
+sides becomes one gap, so the result is the same as formatting the input without those comments.
+
+A comment stays when it comes directly after a `<`, or after `&` followed by letters, digits or `#`, and text comes
+directly after it: without it `a<<!--c-->/p>` would become markup and `&am<!--c-->p;` a character reference.
+
+Bogus comments (`<!…>`, `</ …>`), `<?…>` markup (exposed as a processing instruction by some browsers), and
+comments in verbatim content are never removed.
+
+### Properties
+
+- **Total.** No input throws.
+- **Idempotent.** Formatting the output again gives the output.
+- **Bounded output.** The left margin of a line, indentation and alignment, is at most `lineWrap / 2`, so the output
+  has at most `input · (lineWrap / 4 + 7) + 2 · lineWrap` characters. Beyond that depth (30 levels with the defaults)
+  nesting no longer shows in the indentation.
+- **Linear time.** The reader never backs up: a search either finds its end or ends formatting, with the rest of the
+  input copied.
+
+## Layout
+
+What quad does with the whitespace that is free is its style, not part of the contract.
 
 ```html
 <!-- input -->
@@ -101,149 +261,105 @@ Indents nested elements, collapses whitespace inside tags, normalizes self-closi
 </html>
 ```
 
-### Tag normalization
-
-- Collapses whitespace inside tags: `<div  class="foo"  >` → `<div class="foo">`
-- Void elements (`<br>`, `<img>`, `<input>`, `<meta>`, `<link>`, …) never increase indent depth; trailing slashes removed (see Normalization)
-
-### Long tag wrapping
-
-Tags with many attributes whose opening tag exceeds `lineWrap` (default 120 characters) are split across lines, aligned to the tag name:
+- A block tag goes on a line of its own, and what it contains one level deeper. `html` does not indent; a blank line
+  follows `<html>`, `</head>` and `</body>`.
+- A block element whose content fits on the line with both tags is written on one line:
+  `<p>Some <em>italic</em> and <strong>bold</strong> text.</p>`, `<div><img src="a.png"></div>`.
+- Otherwise the inline content between two block tags becomes lines, broken where the source has line breaks and
+  where a line would pass `lineWrap`.
+- Metadata elements and the doctype take a line of their own where the contract allows it.
+- A start tag longer than `lineWrap` (default 120) wraps its attributes, aligned to the first:
 
 ```html
 <div class="card card-highlighted extra-padding"
      data-tracking-id="header-nav-cta-x"
-     data-analytics-category="navigation">
+     data-analytics-category="navigation"
+     data-more="1">
   Card content
 </div>
 ```
-
-### Inline elements
-
-The following elements are treated as inline — no line break before them, no indentation increment, surrounding spaces preserved:
-
-`a` `abbr` `b` `bdi` `bdo` `cite` `code` `data` `del` `dfn` `em` `i` `ins` `kbd` `mark` `q` `rb` `rp` `rt` `rtc` `ruby` `s` `samp` `small` `span` `strong` `sub` `sup` `time` `u` `var`
-
-```html
-<!-- input -->
-<p>Some <em>italic</em> and <strong>bold</strong> text.</p>
-
-<!-- output — inline elements preserved, spaces kept, no extra indentation -->
-<p>Some <em>italic</em> and <strong>bold</strong> text.</p>
-```
-
-### Context-aware blocks
-
-`<script>`, `<style>`, `<pre>`, `<textarea>`, and `<svg>` content is never tokenized as HTML — quad recognizes their opening tag (case-insensitively) and scans everything up to the matching closing tag as one opaque block, so embedded `<`, `>`, `/>`, or comment-like text inside is never misparsed. What happens to that block's *whitespace* differs by kind:
-
-| Block | Content | Indentation |
-|-------|---------|--------------|
-| `<!-- ... -->` | Preserved verbatim | Placed on its own line at the current depth |
-| `<script>...</script>` | Preserved verbatim, except one formatting boundary newline next to each tag | None — reindentation could change multi-line template-literal values |
-| `<style>...</style>` | Preserved verbatim, with the same boundary-newline exception | None — CSS content is opaque |
-| `<pre>...</pre>` | Preserved verbatim | None — inner tags, spaces, newlines untouched |
-| `<textarea>...</textarea>` | Preserved verbatim | None — including all whitespace |
-| `<svg>...</svg>` | Preserved verbatim | None — inner markup untouched |
-
-`<pre>`, `<textarea>`, and `<svg>` inner content is preserved character-for-character. Script and
-style content is also opaque and never reindented or reflowed; quad only normalizes one boundary
-newline adjacent to each tag so formatting remains idempotent without accumulating blank lines.
-
-### Normalization
-
-HTML5 uses a different syntax than XHTML for void elements and attribute quoting. quad enforces HTML5 conventions:
-
-**Trailing slash removal** — void elements do not use self-closing syntax in HTML5:
-
-```html
-<!-- input -->
-<br /><img src="photo.jpg" /><meta charset="utf-8" />
-
-<!-- output -->
-<br><img src="photo.jpg"><meta charset="utf-8">
-```
-
-Non-void self-closing elements (e.g. SVG `<path />`) are left unchanged.
-
-**Attribute quoting** — all attribute values are normalized to double quotes:
-
-```html
-<!-- input -->
-<meta charset=utf-8>
-<input type='text' maxlength=100>
-
-<!-- output -->
-<meta charset="utf-8">
-<input type="text" maxlength="100">
-```
-
-Boolean attributes without values (`disabled`, `checked`, `required`) are left unchanged — they are already valid HTML5.
-
-**Tag name lowercasing** — HTML5 tag names are case-insensitive, but lowercase is the convention:
-
-```html
-<!-- input -->
-<DIV><P>Hello <STRONG>world</STRONG></P></DIV>
-
-<!-- output -->
-<div>
-  <p>Hello <strong>world</strong></p>
-</div>
-```
-
-Attribute names are intentionally not lowercased — SVG attributes like `viewBox` and `preserveAspectRatio` are case-sensitive and must be preserved verbatim.
-
-### Fix tags
-
-Whitespace artifacts from template rendering are cleaned up before formatting:
-
-- `<div >` → `<div>` (space before `>`)
-
-`< div>` and `</ div>` stay as they are: a browser reads them as text and as a comment, not as tags.
-
-If a second, unquoted `<` turns up before the tag's own closing `>` (e.g. an unencoded `<` in prose like `a <b</p>`), quad backs off and treats the original `<` as literal text instead of speculatively swallowing everything up to some unrelated later `>`. This bailout narrows the ambiguity but doesn't remove it — see [Known Limitations](#known-limitations) for the cases it doesn't catch.
 
 ---
 
 ## Performance
 
-~3.3–3.6× faster than js-beautify on typical build output (measured on Bun v1.3.14; varies run to run within that range — reproduce it yourself rather than trust a single number):
+About 6–9× faster than js-beautify on the fixtures of this repository (measured on Bun v1.4.4; it varies with the machine and the run, so reproduce it rather than trust a single number):
 
 ```bash
 git clone https://github.com/mkorun/quad
 cd quad && bun install && bun run bench
 ```
 
-`bun run bench` uses only fixtures shipped in this repo (no external or private content), so the comparison is reproducible by anyone who clones it. Representative run:
+`bun run bench` uses only fixtures shipped in this repo (no external or private content), so the comparison is reproducible by anyone who clones it. Mean of 8 runs:
 
 | Sample | quad | js-beautify | Factor |
 |--------|----------:|------------:|-------:|
-| hmd-testseite (14.5 KB) | 852 µs | 2475 µs | ×2.9 |
-| feature-coverage (3.3 KB) | 140 µs | 796 µs | ×5.7 |
-| edge-cases (1.7 KB) | 90 µs | 499 µs | ×5.5 |
-| **avg** | **361 µs** | **1257 µs** | **×3.5** |
+| hmd-testseite (37.9 KB) | 513 µs | 2481 µs | ×4.8 |
+| feature-coverage (3.3 KB) | 65 µs | 859 µs | ×13.3 |
+| edge-cases (1.7 KB) | 35 µs | 562 µs | ×16.3 |
+| **avg** | **204 µs** | **1301 µs** | **×6.4** |
 
 Prettier is intentionally not benchmarked — it has no synchronous API, ships ~9.7 MB of bundled parser code, and is not designed for build-pipeline use. js-beautify is the relevant comparison: same weight class, same build-friendly API. It has 5 dependencies and only formats — no normalization. quad does both and is still faster, at a fraction of the footprint of either.
 
-**A fairness note on this number:** the two tools don't do exactly the same amount of work. js-beautify actively restructures `<script>`/`<style>`/`<svg>` content (re-formats JS/CSS, reindents nested SVG markup); quad deliberately treats that content as opaque and copies it verbatim (see [Context-aware blocks](#context-aware-blocks)). On fixtures with a lot of embedded script/style/SVG, that gives quad a work-based head start that has nothing to do with tokenizer speed. Measuring the same fixtures with those blocks emptied out narrows the factor to **~3.1–3.7×** — still a real, consistent advantage, just not quite as dramatic as the headline number on documents that happen to be light on embedded script/style/SVG.
+**A fairness note on this number:** the two tools don't do exactly the same amount of work. js-beautify actively restructures `<script>`/`<style>`/`<svg>` content (re-formats JS/CSS, reindents nested SVG markup); quad copies that content verbatim (see [The elements](#the-elements)). On fixtures with a lot of embedded script/style/SVG, that gives quad a work-based head start that has nothing to do with tokenizer speed.
 
 ---
 
-## Known Limitations
+## Known limitations
 
-- **Inline elements without surrounding text** (`<p><em>…</em></p>`) are placed directly after the opening block tag — no `<p>\n  <em>`. Inline elements do not increment the indent counter.
-- **Whitespace-sensitive element classification follows HTML defaults, not page CSS.** quad cannot know that a stylesheet changes an element from inline to block (or vice versa), so adjacency preservation follows the element's normal HTML rendering category. Source whitespace is never inferred from CSS.
-- **Unbalanced HTML** (more closing than opening tags) is caught via `Math.max(0, indentationCount - 1)` — no crash, but indentation may be off at the affected point. Typically occurs with Markdown-generated output (e.g. `<dl><dt><dd>` on one line).
-- **Nested same-name raw blocks** (e.g. a string literal containing the text `</script>` inside a `<script>` element) end the block at that first occurrence — this matches how browsers actually tokenize HTML (`<script>` content is not parsed for further tags, the first literal `</script>` always ends it), so it's spec-correct behavior, not a quad-specific quirk.
-- **Comment contents are not reformatted.** A multi-line `<!-- ... -->` block is emitted as one unit with its original internal line breaks and indentation kept exactly as written. Comments between inline content stay attached so they cannot introduce or remove visible word spacing; comments in block layout may be repositioned with the surrounding indentation.
-- **`<script>`/`<style>`/`<svg>` inner content is excluded from the automated comparison against js-beautify** (see `differential/`) — js-beautify actively restructures JS/CSS and reformats SVG markup, while quad deliberately treats these blocks as opaque. Element structure and attributes are still compared; quad's own raw-content preservation contract is covered directly by unit tests.
-- **A `<` right before a letter is a tag start, as it is for a browser.** Encode a `<` in prose as `&lt;`. The stray-`<` bailout (see [Fix tags](#fix-tags)) keeps such a `<` as text when a second `<` follows before any `>`, but `a <b > c` is a tag to quad and to a browser alike. A `<` before a space or a digit is text.
+- **quad knows an element by its name, not by the tree a browser builds.** The oracle (see [Tests](#tests)) keeps a
+  case for each of these, where a browser sees a difference:
+  - The default stylesheet hides an element with the attribute `hidden`, an element with the attribute `popover`
+    until it is opened, and a `<dialog>` without `open`. quad still puts the tags of such a block element on lines of
+    their own; between two pieces of text that whitespace renders (`b<div hidden>…</div>c`, `b<div popover>…</div>c`).
+  - An element without content whose end tag is left out gets whitespace: in `<li><li>b</li>` the second start tag ends
+    the first element for a browser, while quad opens a level, and the first `li` is no longer `:empty`.
+  - Whitespace after `</body>` is content of `<body>` for a browser, so an empty `<body></body>` before `</html>` is
+    no longer `:empty`.
+  - At the end of the input whitespace is free also inside an inline element that no end tag closed; the text of that
+    element loses it. Nothing renders differently.
+- **Misnested input.** Where a browser repairs the tree (a stray `</div>`, text directly in `<table>`, `<tr>` outside a
+  table, other misplaced document tags), a block tag may not make a block,
+  and whitespace quad wrote next to it can render. quad still neither throws nor hangs, formats the same twice and
+  keeps the output bound. More end tags than start tags leave the indentation at the left edge.
+- **Block elements in `<ruby>`.** Flow content in `<ruby>` is not conforming, but a browser keeps it there: a block
+  element gets whitespace before and after it that renders (`<ruby>漢<div>x</div><rt>kan</rt></ruby>`).
+- **Classification follows the default stylesheet, not page CSS.** quad cannot know that a stylesheet makes an inline
+  element a block or sets `white-space: pre`.
+- **The end of verbatim content is found without the tree a browser builds.**
+  - Visible outer end tags crossed by an inner region return the entire input unchanged under the
+    uncertain-boundary rule above. Copying only an over-long region is unsafe: formatting after
+    its endpoint can change a later script or add rendered whitespace.
+  - Verbatim content can be shorter where misnested input makes a browser ignore an end tag that quad takes: an HTML
+    element left open in an integration point (`<foreignObject><p>a</foreignObject>`), a `</pre>` inside an
+    `<object>` or a table that stands in the `<pre>`, raw text behind a tag at which a browser leaves foreign content
+    (`<svg><p><textarea>`). What follows is then formatted.
+  - An `<annotation-xml>` is read as HTML whatever its `encoding` says. A browser reads MathML in it unless the
+    encoding names HTML; the two readings differ only for elements that MathML does not have (`<textarea>`,
+    `<style>`, …). This approximation does not establish browser-equivalent boundaries.
+  - The rule does not detect an open `object` that makes a browser ignore `</pre>`, a tag that exits foreign
+    content, or reconstruction of an unclosed formatting element after `</pre>`. These remain tree-repair limits:
+    `<pre><object></pre>a`, `<math><p><textarea></math><P>A  B</P>` and `<pre><b>x</pre><div>y</div>` can still differ.
+- **`noscript` is raw text for quad**, as for a browser with scripting. Without scripting a browser reads its
+  content as markup; quad copies it either way.
+- **In ordinary script data, `</script>` ends the script**, also inside a JavaScript string literal. In
+  double-escaped script data (`<!--<script>…`) an inner `</script>` leaves double escaping; it does not close the
+  outer script. See the raw-text row above.
+- **Comment contents are not reformatted.** A multi-line `<!-- ... -->` is written as one unit with its line breaks
+  and indentation as they are.
+- **A `<` right before a letter is a tag start, as it is for a browser.** Encode a `<` in prose as `&lt;`. A `<` before
+  a space or a digit is text.
+- **Input that ends early is copied without a report.** An unterminated `<script>` or comment formats silently; see
+  [Input that ends early](#input-that-ends-early).
+- **`<script>`/`<style>`/`<svg>` inner content is excluded from the automated comparison against js-beautify** (see
+  `differential/`) — js-beautify restructures JS/CSS and reformats SVG markup, while quad copies these blocks.
+  Element structure and attributes are still compared.
 
 ---
 
 ## Untrusted input
 
-quad is designed for **build-pipeline use** — it formats HTML that you generated yourself from your own templates. It is synchronous and has no timeout: a pathological input could theoretically block the thread indefinitely. (quad's own lexer guarantees forward progress on every character — no known input hangs quad itself — but "no known input" is not a safety guarantee for content you don't control.)
+quad is designed for **build-pipeline use** — it formats HTML that you generated yourself from your own templates. It is synchronous and has no timeout. Its time and its output are bounded by the size of the input (see [Properties](#properties)), and the gate checks that on generated and on hostile input — but a test is not a safety guarantee for content you don't control.
 
 If you need to format HTML from an untrusted source (user-submitted content, scraped pages, third-party APIs), run quad inside a Worker thread with a timeout. quad is ESM-only, so the worker needs its own file — `require()` on an ESM package inside an `eval: true` Worker (a common pattern for CJS packages) will not work here.
 
@@ -298,7 +414,7 @@ A persistent pool reduces per-call overhead to ~0.5–1 ms (IPC serialization on
 
 ## RE2 compatibility
 
-quad's regular expressions use only constructs supported by RE2. Tokenization itself is a plain character/index scanner — not regex-based at all, so it has no RE2 exposure by construction. The handful of remaining regexes (tab replacement, a dynamically-built `</tagname\s*>` raw-content terminator, a couple of literal-character replacements) use only character classes and anchors — no lookaheads, lookbehinds, or backreferences anywhere in the codebase, so there's no catastrophic-backtracking risk on any regex engine, RE2 or otherwise.
+quad's regular expressions use only constructs supported by RE2. Reading tags, comments and text is a plain character/index scanner, not regex-based at all. The regular expressions that remain find the end of raw text: one precompiled pattern per element (`</name` before whitespace, `/` or `>`, each letter spelled in both cases) and one alternation for script data; two more replace single characters. They use literals, character classes, `?` and `|` — no lookaheads, lookbehinds, or backreferences anywhere in the codebase, so there's no catastrophic-backtracking risk on any regex engine, RE2 or otherwise.
 
 This matters if you ever run quad somewhere that specifically requires RE2 syntax (e.g. embedding it in a Go or Rust host via a JS engine backed by RE2, or a linter that flags non-RE2-safe patterns) — not because common edge/serverless platforms use RE2 themselves. Cloudflare Workers and Deno Deploy, for instance, both run on V8 (the same regex engine as Node and Chrome), not RE2 — they're mentioned here only as compatible target environments, not as evidence that RE2-compatibility was required to run on them.
 
@@ -307,39 +423,33 @@ This matters if you ever run quad somewhere that specifically requires RE2 synta
 ## Tests
 
 ```bash
-bun test   # 147 tests: 139 unit tests + 8 differential/idempotency/extractor tests
+./check.sh             # the gate: types, tests with coverage, the browser oracle, the build, no secret
+bun test               # 261 tests, no browser
+bun oracle/check.ts    # the browser oracle; needs Chromium
 ```
 
-| Group | Coverage |
-|-------|----------|
-| basic formatting | Indentation, structure, custom indent string |
-| void elements | `br`, `img`, `input`, `meta`, self-closing |
-| HTML comments | Content preserved, no spurious whitespace around `-->` |
-| stripComments | Comment removal without gluing adjacent words together |
-| script/style preservation | JS/CSS opaque and not reindented; template-literal content unchanged |
-| textarea preservation | Whitespace untouched, embedded tag-like text stays literal |
-| long tag wrapping | Attribute wrapping at `lineWrap` |
-| tag normalization | Whitespace collapse, self-closing syntax |
-| **normalization** | **Trailing slash removal, attribute quoting, tag name lowercasing** |
-| indentation clamp | No crash on unbalanced HTML |
-| multiline text content | Long text wraps, short text stays inline |
-| pre preservation | Content including inner tags preserved exactly |
-| svg preservation | Inner markup verbatim, self-closing children, no indent increment |
-| inline/phrasing elements | Spaces preserved around inline, void, replaced, and custom elements |
-| blank line fixes | No spurious blank lines before `<hr>`, `<img>`, after `<script>` |
-| **quote-aware attribute parsing** | **`>`/quotes inside attribute values, no infinite loop on a stray `/`** |
-| **case-insensitive raw content** | **`<SCRIPT>`, `<Style>`, mixed case — still recognized as raw content** |
-| leading/trailing text | Text-only input, text outside the outermost tag |
-| doctype | Recognized as a tag (any case), not absorbed into surrounding text |
-| malformed input | Missing `>`, missing closing tags, unterminated comments/raw blocks — no hang, no throw |
-| crash resistance | Real article HTML from Markdown output, plus full-document idempotency |
-| **semantic equality vs. js-beautify** | **Same elements/attributes/text/comments — see [`differential/`](./differential); layout differences excluded on purpose** |
-| **namespaced tag names** | **`<svg:svg>` doesn't get truncated at `:` and mistaken for raw content** |
-| **whitespace before a block-ish sensitive tag** | **`button`, `label`, `svg`, custom elements — source space preserved without inventing one at a layout-only block boundary** |
-| **unencoded "<" in prose** | **`a < b` stays literal text instead of being misread as a tag and swallowing the rest of the document; genuine `< div>`/`</ div>` template-whitespace normalization still works** |
-| **wrapping text after an inline element** | **`<em>x</em>. Long sentence…` — a text node that wraps keeps its first unbroken run attached to the current line; the wrap newline is never introduced at a junction that had no source whitespace** |
+| Part | What it holds |
+|------|---------------|
+| `tests/formatting.test.ts` | Unit tests of layout, tag spelling, verbatim content, comments, malformed input |
+| `tests/findings.test.ts` | One test per finding of the 2026-11 review and specification (Q-1 to Q-8, N-1 to N-13); each fails on 0.1.5. One per finding of the review of the rewrite (R-1 to R-10) that shows without a browser |
+| `tests/correction.test.ts`, `tests/oracle.test.ts` | Last-review wrap and boundary regressions, script-data documentation, and exact negative-oracle verdicts |
+| `tests/properties.test.ts` | Generated input from a fixed seed in three domains — conforming documents, the same with broken tags, arbitrary strings — with five option sets: no throw, idempotent, the output bound. Each conforming document comes with its facts (every token in the spelling the contract gives it, and whether whitespace may, must or must not lie before it), and the output must be exactly those. Stress families at 2,000, 8,000 and 32,000 repetitions stay within the output bound |
+| `differential/` | Same elements, attributes, text and comments as js-beautify's output on the fixtures; layout differences excluded on purpose |
+| `oracle/` | A headless Chromium compares input and output: the DOM in a normal form that ignores whitespace which does not render, and `document.body.innerText`; with `stripComments` also that the comments outside verbatim content are gone. It runs the findings, the fixtures and a sample of the generated documents, and checks quad's block elements against the `display` of the default stylesheet for every HTML element name |
 
-Bold rows were added after external reviews found real bugs: the first found regressions in the previous regex-based tokenizer (quote-unaware `>` handling, the infinite loop, case-sensitive raw-content detection); a second review of the rewritten lexer found a namespaced-tag-name truncation bug and a whitespace-loss bug before non-inline sensitive tags; a downstream site review (0.1.3) found the wrapping path inventing a rendered space after an inline element. Each row's rewrite is what the corresponding test group now guards against regressing.
+`tsconfig.typecheck.json` checks tests, the generator, differential helpers, the oracle and benchmarks without emitting files.
+The gate runs it separately; `tsconfig.json` and the published build remain unchanged.
+
+The oracle is a script of its own, not part of `bun test`. It starts the binary named by `QUAD_CHROMIUM` (default
+`chromium`) once, serves the documents from `127.0.0.1` and loads each in a sandboxed frame, where no script of the
+document runs. Its own tests are pairs with a known verdict (`oracle/cases.ts`): three false alarms of an earlier
+fuzzer must pass; the findings as 0.1.5 wrote them, the findings of the review of the rewrite as it wrote them, and
+faults written by hand that the oracle once missed must fail; and the [known limitations](#known-limitations) must
+keep failing for their recorded violations. Each negative pair matches its complete DOM, rendered-text and comment
+violations against `oracle/expected-violations.json`; another difference or an additional corruption fails. To
+intentionally change the corpus, run `bun oracle/check.ts --record-violations` and review every changed observation
+before committing it. The recording command still rejects unexpected failures of positive pairs and negative pairs
+that no longer fail.
 
 ---
 

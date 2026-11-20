@@ -1,0 +1,208 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>quad oracle</title>
+<script>
+// Runs in the browser. Loads every document of the job in a sandboxed frame, where no script of the document runs,
+// and posts back for each its DOM in the normal form N and its rendered text; for each element name of the job,
+// the `display` the browser's default stylesheet gives it.
+
+const HTML = 'http://www.w3.org/1999/xhtml'
+// Inside these, and inside SVG and MathML, text is compared exactly and comments stay
+const VERBATIM = new Set(['pre', 'listing', 'textarea', 'title', 'script', 'style', 'xmp', 'iframe', 'noscript', 'noembed', 'noframes', 'plaintext'])
+// The values of `display` whose box sits in a line of text; `none` is told apart, every other value is a block
+const IN_LINE = new Set(['inline', 'inline-block', 'inline-flex', 'inline-grid', 'inline-table', 'ruby', 'ruby-text', 'contents'])
+const boxOf = display => (display === 'none' ? 'hidden' : IN_LINE.has(display) ? 'inline' : 'block')
+
+// The `display` of an element of `document`. The content of a <template> is in no document that renders, and of
+// such an element the browser tells none: a copy of it without its content tells it, in the document for a moment.
+const displayIn = (document, element) => {
+	const view = document.defaultView
+	if (element.isConnected) return view.getComputedStyle(element).display
+	const copy = document.importNode(element, false)
+	document.documentElement.appendChild(copy)
+	const display = view.getComputedStyle(copy).display
+	copy.remove()
+	if (display === '') throw new Error(`no display for <${element.localName}> outside the rendering`)
+	return display
+}
+
+// The document as a flat list of events. A comment outside verbatim content is one that stripComments removes.
+const eventsOf = document => {
+	const events = []
+	const walk = (parent, verbatim) => {
+		for (const node of parent.childNodes) {
+			if (node.nodeType === Node.TEXT_NODE) events.push({ type: verbatim ? 'verbatim' : 'text', value: node.data })
+			else if (node.nodeType === Node.COMMENT_NODE) events.push({ type: 'comment', value: node.data, verbatim })
+			// Chromium 156 makes a processing instruction of "<?x …>", where the HTML standard has a comment
+			else if (node.nodeType === Node.PROCESSING_INSTRUCTION_NODE) events.push({ type: 'instruction', value: [node.target, node.data] })
+			else if (node.nodeType !== Node.ELEMENT_NODE) {
+				// The doctype is read from the document
+				if (node.nodeType !== Node.DOCUMENT_TYPE_NODE) throw new Error(`a node of type ${node.nodeType}, which the normal form does not know`)
+			} else {
+				const box = boxOf(displayIn(document, node))
+				const attributes = Array.from(node.attributes, attribute => [attribute.name, attribute.value])
+				events.push({ type: 'open', box, value: [node.namespaceURI, node.localName, attributes, node.matches(':empty')] })
+				const inner = verbatim || node.namespaceURI !== HTML || VERBATIM.has(node.localName)
+				walk(node.localName === 'template' && node.content ? node.content : node, inner)
+				events.push({ type: 'close', box })
+			}
+		}
+	}
+	walk(document, false)
+	return events
+}
+
+// A comment or a processing instruction: it renders nothing and is no boundary
+const isMark = event => event.type === 'comment' || event.type === 'instruction'
+
+// Whitespace runs collapse to one space, neighbouring texts are one text, and a space before a comment counts
+// as after it
+const collapse = events => {
+	const result = []
+	let carriedSpace = false
+	const pushText = value => {
+		const last = result[result.length - 1]
+		if (last !== undefined && last.type === 'text') last.value = (last.value + value).replace(/ +/g, ' ')
+		else result.push({ type: 'text', value })
+	}
+	for (const event of events) {
+		if (isMark(event)) {
+			const last = result[result.length - 1]
+			if (last !== undefined && last.type === 'text' && last.value.endsWith(' ')) {
+				last.value = last.value.slice(0, -1)
+				if (last.value === '') result.pop()
+				carriedSpace = true
+			}
+			result.push(event)
+			continue
+		}
+		if (carriedSpace) {
+			result.push({ type: 'text', value: ' ' })
+			carriedSpace = false
+		}
+		if (event.type === 'text') pushText(event.value.replace(/[ \t\n\r]+/g, ' '))
+		else result.push(event)
+	}
+	if (carriedSpace) result.push({ type: 'text', value: ' ' })
+	return result
+}
+
+// Whether the nearest neighbour of events[index] in `direction` is a block boundary. Comments, whitespace-only
+// text and whole hidden elements are skipped; the start and the end of the document are boundaries, and so is
+// the inside of a hidden element, where nothing renders.
+const atBlockBoundary = (events, index, direction) => {
+	const entering = direction === 1 ? 'open' : 'close'
+	const leaving = direction === 1 ? 'close' : 'open'
+	for (let i = index + direction; i >= 0 && i < events.length; i += direction) {
+		const event = events[i]
+		if (isMark(event) || (event.type === 'text' && event.value === ' ')) continue
+		if (event.type !== 'open' && event.type !== 'close') return false
+		if (event.box === 'block') return true
+		if (event.box === 'inline') return false
+		if (event.type !== entering) return true
+		// A whole hidden element: go on behind its other tag
+		for (let depth = 1; depth > 0; ) {
+			i += direction
+			if (events[i].type === entering) depth++
+			else if (events[i].type === leaving) depth--
+		}
+	}
+	return true
+}
+
+// The normal form N of a document's events: equal for two documents that differ only in whitespace a browser does
+// not render. With `stripComments` the comments outside verbatim content are left out.
+const normalForm = (document, allEvents, stripComments) => {
+	const events = collapse(stripComments ? allEvents.filter(event => event.type !== 'comment' || event.verbatim) : allEvents)
+	const kept = []
+	for (const [index, event] of events.entries()) {
+		if (event.type !== 'text') {
+			kept.push(event.type === 'close' ? ['close'] : [event.type, event.value])
+			continue
+		}
+		let value = event.value
+		if (value.startsWith(' ') && atBlockBoundary(events, index, -1)) value = value.slice(1)
+		if (value.endsWith(' ') && atBlockBoundary(events, index, 1)) value = value.slice(0, -1)
+		if (value !== '') kept.push(['text', value])
+	}
+	const doctype = document.doctype
+	return JSON.stringify([doctype && [doctype.name, doctype.publicId, doctype.systemId], document.compatMode, kept])
+}
+
+// Takes the comments outside verbatim content out of the document, as stripComments does, and joins the text
+// on both sides of each
+const removeComments = document => {
+	const walk = parent => {
+		for (const node of Array.from(parent.childNodes)) {
+			if (node.nodeType === Node.COMMENT_NODE) node.remove()
+			else if (node.nodeType === Node.ELEMENT_NODE && node.namespaceURI === HTML && !VERBATIM.has(node.localName)) walk(node)
+		}
+	}
+	walk(document)
+	document.normalize()
+	// Chromium does not lay out anew every text that normalize() joined. Taking the root out of the rendering and
+	// putting it back builds the layout from the document as it is now.
+	const root = document.documentElement
+	root.style.display = 'none'
+	root.getBoundingClientRect()
+	root.style.display = ''
+}
+
+const textOf = document => (document.body ? document.body.innerText : '')
+
+const load = index => new Promise((resolve, reject) => {
+	const frame = document.createElement('iframe')
+	// allow-same-origin lets this page read the frame; without allow-scripts nothing in the document runs
+	frame.setAttribute('sandbox', 'allow-same-origin')
+	frame.style.width = '800px'
+	frame.style.height = '600px'
+	frame.onload = () => {
+		try {
+			const loaded = frame.contentDocument
+			const events = eventsOf(loaded)
+			const result = {
+				normalForm: normalForm(loaded, events, false),
+				normalFormWithoutComments: normalForm(loaded, events, true),
+				comments: events.filter(event => event.type === 'comment' && !event.verbatim).map(event => event.value),
+				text: textOf(loaded),
+			}
+			removeComments(loaded)
+			result.textWithoutComments = textOf(loaded)
+			resolve(result)
+		} catch (error) {
+			reject(error)
+		} finally {
+			frame.remove()
+		}
+	}
+	frame.src = '/document/' + index
+	document.body.appendChild(frame)
+})
+
+// What the default stylesheet makes of an element with this name and no attribute
+const displayOf = name => {
+	const element = document.createElement(name)
+	document.body.appendChild(element)
+	const display = getComputedStyle(element).display
+	element.remove()
+	return display
+}
+
+const run = async () => {
+	const job = await (await fetch('/job')).json()
+	const documents = []
+	for (let index = 0; index < job.documents; index++) documents.push(await load(index))
+	const displays = Object.fromEntries(job.elementNames.map(name => {
+		const display = displayOf(name)
+		return [name, { display, box: boxOf(display) }]
+	}))
+	return { documents, displays }
+}
+
+addEventListener('load', () => {
+	run().then(
+		result => fetch('/result', { method: 'POST', body: JSON.stringify(result) }),
+		error => fetch('/result', { method: 'POST', body: JSON.stringify({ error: String(error && error.stack || error) }) }),
+	)
+})
+</script>

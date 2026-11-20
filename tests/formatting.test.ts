@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'bun:test'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import htmlFmt from '../index'
+import htmlFmt from '../index.ts'
 
 describe('htmlFmt — basic formatting', () => {
 
@@ -66,14 +66,20 @@ describe('htmlFmt — void elements', () => {
 	})
 
 	it('does not increase depth for <img>', () => {
-		const result = htmlFmt('<div><img src="x.png" alt="x"></div>')
+		// Contract: <img> is inline, so alone in a <div> it is a run that fits on the line of both tags
+		expect(htmlFmt('<div><img src="x.png" alt="x"></div>')).toBe('<div><img src="x.png" alt="x"></div>')
+		const result = htmlFmt('<div><img src="x.png" alt="x"><p>after</p></div>')
 		expect(result).toContain('  <img src="x.png" alt="x">')
+		expect(result).toContain('  <p>after</p>')
 		expect(result).not.toContain('    ')
 	})
 
 	it('does not increase depth for <input>', () => {
-		const result = htmlFmt('<form><input type="text"></form>')
+		// Contract: <input> is inline, as <img> above
+		expect(htmlFmt('<form><input type="text"></form>')).toBe('<form><input type="text"></form>')
+		const result = htmlFmt('<form><input type="text"><p>after</p></form>')
 		expect(result).toContain('  <input type="text">')
+		expect(result).toContain('  <p>after</p>')
 	})
 
 	it('does not increase depth for <meta>', () => {
@@ -82,8 +88,8 @@ describe('htmlFmt — void elements', () => {
 	})
 
 	it('handles self-closing tags', () => {
-		const result = htmlFmt('<div><path d="M0 0" /></div>')
-		expect(result).toContain('  <path d="M0 0" />')
+		// Contract: an unknown element such as <path> is inline and stays on the line of its parent
+		expect(htmlFmt('<div><path d="M0 0"/></div>')).toBe('<div><path d="M0 0" /></div>')
 	})
 
 })
@@ -177,9 +183,8 @@ describe('htmlFmt — script and style preservation', () => {
 		// Regression: an earlier version reindented <script> content to match the surrounding
 		// HTML depth, but doing that safely is impossible without a real JS parser — it can add
 		// indentation inside a multi-line template literal, changing the string's runtime value
-		// (e.g. `first\nsecond` becoming `first\n    second`). quad no longer touches this content
-		// at all beyond stripping the single boundary newline next to each tag (see the two tests
-		// below) — the JSON's own original 2-space indentation must survive completely unchanged.
+		// (e.g. `first\nsecond` becoming `first\n    second`). quad copies this content byte for
+		// byte — the JSON's own original 2-space indentation must survive completely unchanged.
 		const json = '{\n  "@context": "https://schema.org",\n  "@type": "BlogPosting"\n}'
 		const input = `<head><script type="application/ld+json">${json}\n</script></head>`
 		const result = htmlFmt(input)
@@ -223,9 +228,8 @@ describe('htmlFmt — script and style preservation', () => {
 		expect(result).toContain('"author": {')
 		expect(result).toContain('"@type": "Person"')
 		expect(result).toContain('"publisher": {')
-		// outer braces must survive
-		expect(result).toMatch(/^\s*\{/m)
-		expect(result).toMatch(/^\s*\}\s*\n\s*<\/script>/m)
+		// Contract: script content is verbatim, so no line break is added after the start tag
+		expect(result).toContain(`<script type="application/ld+json">${ld}\n</script>`)
 	})
 
 	it('collapses empty <script src="..."></script> to a single line', () => {
@@ -235,13 +239,12 @@ describe('htmlFmt — script and style preservation', () => {
 		expect(result).not.toMatch(/<script[^>]*>\n<\/script>/)
 	})
 
-	it('indents </script> at the correct HTML level after multi-line content', () => {
+	it('leaves </script> where the source has it after multi-line content', () => {
 		const ld = JSON.stringify({ '@context': 'https://schema.org', '@type': 'BlogPosting' }, null, 2)
 		const input = `<head><script type="application/ld+json">${ld}\n</script></head>`
 		const result = htmlFmt(input)
-		// </script> must be at the same indentation as <script>, not at column 0
-		expect(result).toContain('  </script>')
-		expect(result).not.toMatch(/\n<\/script>/)
+		// Contract: the whitespace before </script> is script content, so it is not re-indented
+		expect(result).toContain(`${ld}\n</script>`)
 	})
 
 	it('collapses empty <style> to a single line', () => {
@@ -349,9 +352,8 @@ describe('htmlFmt — tag normalization', () => {
 	})
 
 	it('collapses all whitespace before self-closing markers (regression)', () => {
-		expect(htmlFmt('<div><custom-element   /></div>')).toBe(
-			'<div>\n  <custom-element />\n</div>',
-		)
+		// Contract: a custom element is inline and stays on the line of its parent
+		expect(htmlFmt('<div><custom-element   /></div>')).toBe('<div><custom-element /></div>')
 	})
 
 })
@@ -444,9 +446,15 @@ describe('htmlFmt — inline elements', () => {
 	})
 
 	it('preserves every HTML whitespace kind after a closing inline element', () => {
-		for (const whitespace of [' ', '\t', '\n', '\r', '\f']) {
+		// Contract W2: a space stays a space, a line break stays a line break
+		for (const whitespace of [' ', '\t']) {
 			expect(htmlFmt(`<p><em>x</em>${whitespace}y</p>`)).toBe('<p><em>x</em> y</p>')
 		}
+		for (const whitespace of ['\n', '\r']) {
+			expect(htmlFmt(`<p><em>x</em>${whitespace}y</p>`)).toBe('<p>\n  <em>x</em>\n  y\n</p>')
+		}
+		// A form feed in text is a character that renders, not whitespace (N-9)
+		expect(htmlFmt('<p><em>x</em>\fy</p>')).toBe('<p><em>x</em>\fy</p>')
 	})
 
 	it('does not invent whitespace around inline void and phrasing elements', () => {
@@ -582,8 +590,9 @@ describe('htmlFmt — svg preservation', () => {
 	})
 
 	it('indents svg opening tag at block level', () => {
-		const result = htmlFmt('<div><svg><path /></svg></div>')
-		expect(result).toContain('  <svg>')
+		// Contract: <svg> is inline, so alone in a <div> it stays on the line of both tags
+		expect(htmlFmt('<div><svg><path /></svg></div>')).toBe('<div><svg><path /></svg></div>')
+		expect(htmlFmt('<div><svg><path /></svg><p>after</p></div>')).toContain('\n  <svg>')
 	})
 
 	it('does not increment indentation inside svg', () => {
@@ -986,7 +995,8 @@ describe('htmlFmt — unencoded "<" in prose does not corrupt the rest of the do
 	})
 
 	it('keeps a quote in a value without quotes inside that value', () => {
-		expect(htmlFmt('<p title=a"data-b="1>y</p>')).toBe('<p title="a&quot;data-b=&quot;1">y</p>')
+		// Contract: a quote in an unquoted value makes the tag irregular; it is copied, not repaired
+		expect(htmlFmt('<p title=a"data-b="1>y</p>')).toBe('<p title=a"data-b="1>y</p>')
 	})
 
 	it('does not treat "<" inside a quoted attribute value as a stray tag start', () => {

@@ -1,0 +1,561 @@
+{
+	"0.1.5's output, Q-1 <title>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"title\",[],false]],[\"verbatim\",\"<T>\"],[\"close\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],true]],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"title\",[],false]],[\"verbatim\",\"\\n  <t>\\n  \"],[\"close\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],true]],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"0.1.5's output, Q-2 <label>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"label\",[],false]],[\"text\",\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"],[\"close\"],[\"text\",\"x\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"label\",[],false]],[\"text\",\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa \"],[\"close\"],[\"text\",\"x\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaax",
+			"after": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa x"
+		}
+	],
+	"0.1.5's output, Q-2 <button>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"button\",[],false]],[\"text\",\"aaaaa\"],[\"close\"],[\"text\",\"x\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"button\",[],false]],[\"text\",\"aaaaa \"],[\"close\"],[\"text\",\"x\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"0.1.5's output, Q-2 custom element": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"y\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"my-el\",[],false]],[\"text\",\"aaaaa\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"y\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"my-el\",[],false]],[\"text\",\"aaaaa \"],[\"close\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"0.1.5's output, Q-3 nested <svg>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/2000/svg\",\"svg\",[],false]],[\"open\",[\"http://www.w3.org/2000/svg\",\"svg\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/2000/svg\",\"text\",[[\"xml:space\",\"preserve\"]],false]],[\"verbatim\",\"A  B\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/2000/svg\",\"svg\",[],false]],[\"open\",[\"http://www.w3.org/2000/svg\",\"svg\",[],true]],[\"close\"],[\"verbatim\",\"\\n\"],[\"open\",[\"http://www.w3.org/2000/svg\",\"text\",[[\"xml:space\",\"preserve\"]],false]],[\"verbatim\",\"A B\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "A  B",
+			"after": "A B"
+		}
+	],
+	"0.1.5's output, Q-4 <!-->": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"ab\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "ab",
+			"after": "a"
+		}
+	],
+	"0.1.5's output, Q-5 <pre>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"pre\",[],true]],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"pre\",[],false]],[\"verbatim\",\"  \"],[\"close\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "",
+			"after": "  "
+		}
+	],
+	"0.1.5's output, Q-5 <textarea>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"textarea\",[],true]],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"textarea\",[],false]],[\"verbatim\",\"  \"],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"0.1.5's output, Q-5 <script>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"script\",[[\"a\",\"\"]],false]],[\"verbatim\",\"<a\"],[\"close\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],true]],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"script\",[[\"a\",\"\"]],false]],[\"verbatim\",\"\\n<a\\n  \"],[\"close\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],true]],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"0.1.5's output, Q-6 \"<\" in <style>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"style\",[[\"<d\",\"\"]],true]],[\"close\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],true]],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"style<d\",[],true]],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"0.1.5's output, Q-6 \"<\" in <a>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"a\",[[\"<n\",\"\"]],true]],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"a<n\",[],true]],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"0.1.5's output, Q-6 no-break space in <script>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"script \",[],true]],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"script\",[],false]],[\"verbatim\",\"\\n\\n  \"],[\"close\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],true]],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"0.1.5's output, Q-6 no-break space in <a>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"a \",[],true]],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"a\",[],true]],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"0.1.5's output, Q-6 \"=\" as attribute name": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"a\",[[\"=\",\"\"]],true]],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"a\",[[\"=\\\"\\\"\",\"\"]],true]],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"0.1.5's output, Q-6 \"/\" in a tag": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"a\",[[\"a\",\"\"]],false]],[\"text\",\" a\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"a\",[[\"a\",\"\"]],false]],[\"text\",\"a\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"0.1.5's output, Q-6 quote outside a value": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"a\\\"\",[],false]],[\"text\",\"a >\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"a\\\"\",[],false]],[\"text\",\"a>\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "a >",
+			"after": "a>"
+		}
+	],
+	"0.1.5's output, Q-6 bogus comment \"<!\"": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"a\",[],true]],[\"comment\",\" \"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"a\",[],true]],[\"comment\",\"\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"0.1.5's output, Q-6 bogus comment \"<?\"": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"a\",[],true]],[\"comment\",\"? \"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"a\",[],true]],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"0.1.5's output, Q-6 bogus comment \"</\"": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"a\",[],true]],[\"comment\",\" \"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"a\",[],false]],[\"text\",\"</\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "",
+			"after": "</"
+		}
+	],
+	"0.1.5's output, Q-6 <script/>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"script\",[],false]],[\"verbatim\",\"<R\"],[\"close\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],true]],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"script\",[],false]],[\"verbatim\",\"\\n<r\"],[\"close\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],true]],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"0.1.5's output, N-1 line break in a value": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"a\",[[\"title\",\"line1\\nline2\\tx\"]],true]],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"a\",[[\"title\",\"line1 line2  x\"]],true]],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"0.1.5's output, N-2 \"/\" ends a value": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"a\",[[\"href\",\"x/\"]],true]],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"a\",[[\"href\",\"x\"]],true]],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"0.1.5's output, N-3 nested <pre>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"pre\",[],false]],[\"verbatim\",\"a\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"pre\",[],false]],[\"verbatim\",\"b\"],[\"close\"],[\"verbatim\",\" c  d\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"pre\",[],false]],[\"verbatim\",\"a\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"pre\",[],false]],[\"verbatim\",\"b\"],[\"close\"],[\"verbatim\",\"c d\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "a\nb\n c  d",
+			"after": "a\nb\nc d"
+		}
+	],
+	"0.1.5's output, N-4 <script> in text": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"script\",[],false]],[\"verbatim\",\"x\"],[\"close\"],[\"text\",\"b\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a \"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"script\",[],false]],[\"verbatim\",\"\\nx\\n  \"],[\"close\"],[\"text\",\"b\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "ab",
+			"after": "a b"
+		}
+	],
+	"0.1.5's output, N-4 <style> in text": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"span\",[],false]],[\"text\",\"a\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"style\",[],false]],[\"verbatim\",\".x{}\"],[\"close\"],[\"text\",\"b\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"span\",[],false]],[\"text\",\"a\"],[\"close\"],[\"text\",\" \"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"style\",[],false]],[\"verbatim\",\"\\n.x{}\\n  \"],[\"close\"],[\"text\",\"b\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "ab",
+			"after": "a b"
+		}
+	],
+	"0.1.5's output, N-5 <picture>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"x\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"picture\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"source\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"img\",[],true]],[\"close\"],[\"close\"],[\"text\",\"y\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"x\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"picture\",[],false]],[\"text\",\" \"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"source\",[],true]],[\"close\"],[\"text\",\" \"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"img\",[],true]],[\"close\"],[\"text\",\" \"],[\"close\"],[\"text\",\"y\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "xy",
+			"after": "x  y"
+		}
+	],
+	"0.1.5's output, N-5 <math>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a\"],[\"open\",[\"http://www.w3.org/1998/Math/MathML\",\"math\",[],false]],[\"open\",[\"http://www.w3.org/1998/Math/MathML\",\"mi\",[],false]],[\"verbatim\",\" x \"],[\"close\"],[\"close\"],[\"text\",\"b\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a\"],[\"open\",[\"http://www.w3.org/1998/Math/MathML\",\"math\",[],false]],[\"verbatim\",\"\\n    \"],[\"open\",[\"http://www.w3.org/1998/Math/MathML\",\"mi\",[],false]],[\"verbatim\",\"x\"],[\"close\"],[\"verbatim\",\"\\n  \"],[\"close\"],[\"text\",\"b\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "a\nx\nb",
+			"after": "a \n𝑥\nb"
+		}
+	],
+	"0.1.5's output, N-6 JSON in <script>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"script\",[[\"type\",\"application/json\"]],false]],[\"verbatim\",\"{\\\"a\\\":1}\"],[\"close\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],true]],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"script\",[[\"type\",\"application/json\"]],false]],[\"verbatim\",\"\\n{\\\"a\\\":1}\\n\"],[\"close\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],true]],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"0.1.5's output, N-7 comment after \"<\"": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a</p>b\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a\"],[\"close\"],[\"text\",\"b\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "a</p>b",
+			"after": "a\n\nb"
+		},
+		{
+			"check": "comments outside verbatim content",
+			"before": "[\"c\"]",
+			"after": "[]"
+		}
+	],
+	"0.1.5's output, N-7 comment in a character reference": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"&amp;\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"&\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "&amp;",
+			"after": "&"
+		},
+		{
+			"check": "comments outside verbatim content",
+			"before": "[\"c\"]",
+			"after": "[]"
+		}
+	],
+	"0.1.5's output, N-8 whitespace-only content": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"div\",[],false]],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"div\",[],true]],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"0.1.5's output, N-9 form feed": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"em\",[],false]],[\"text\",\"x\"],[\"close\"],[\"text\",\"\\fy\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"em\",[],false]],[\"text\",\"x\"],[\"close\"],[\"text\",\" y\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "x\fy",
+			"after": "x y"
+		}
+	],
+	"0.1.5's output, N-10 <wbr>": [
+		{
+			"check": "rendered text",
+			"before": "a b c d e f g h i j k",
+			"after": "ab c d e f g h i j k"
+		}
+	],
+	"0.1.5's output, N-11 non-ASCII tag name": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"x-É\",[],true]],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"x-é\",[],true]],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"the reviewed rewrite's output, R-1 doctype next to a comment in an empty element": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"div\",[],true]],[\"comment\",\"\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"div\",[],false]],[\"comment\",\"\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"the reviewed rewrite's output, R-3 </pre> in an integration point of <math> inside <pre>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"pre\",[],false]],[\"open\",[\"http://www.w3.org/1998/Math/MathML\",\"math\",[],false]],[\"open\",[\"http://www.w3.org/1998/Math/MathML\",\"mi\",[],false]],[\"verbatim\",\"ab\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"pre\",[],false]],[\"open\",[\"http://www.w3.org/1998/Math/MathML\",\"math\",[],false]],[\"open\",[\"http://www.w3.org/1998/Math/MathML\",\"mi\",[],false]],[\"verbatim\",\"a\\nb\"],[\"close\"],[\"close\"],[\"verbatim\",\"\\n\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "ab",
+			"after": "a\nb\n\n"
+		}
+	],
+	"the reviewed rewrite's output, R-3 </pre> in a CDATA section of <svg> inside <pre>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"pre\",[],false]],[\"open\",[\"http://www.w3.org/2000/svg\",\"svg\",[],false]],[\"verbatim\",\" a > b </pre> \"],[\"close\"],[\"verbatim\",\"  c  d\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"pre\",[],false]],[\"open\",[\"http://www.w3.org/2000/svg\",\"svg\",[],false]],[\"verbatim\",\" a > b </pre>\\n\"],[\"close\"],[\"verbatim\",\" c d\\n\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "  c  d",
+			"after": " c d\n"
+		}
+	],
+	"the reviewed rewrite's output, R-4 </svg> in a <textarea> inside <foreignObject>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/2000/svg\",\"svg\",[],false]],[\"open\",[\"http://www.w3.org/2000/svg\",\"foreignObject\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"textarea\",[],false]],[\"verbatim\",\"</svg><DIV>a</DIV>\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/2000/svg\",\"svg\",[],false]],[\"open\",[\"http://www.w3.org/2000/svg\",\"foreignObject\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"textarea\",[],false]],[\"verbatim\",\"</svg>\\n<div>a</div>\\n\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"the reviewed rewrite's output, R-4 </math> in a <textarea> inside <annotation-xml>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1998/Math/MathML\",\"math\",[],false]],[\"open\",[\"http://www.w3.org/1998/Math/MathML\",\"annotation-xml\",[[\"encoding\",\"text/html\"]],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"textarea\",[],false]],[\"verbatim\",\"</math><DIV>a</DIV>\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1998/Math/MathML\",\"math\",[],false]],[\"open\",[\"http://www.w3.org/1998/Math/MathML\",\"annotation-xml\",[[\"encoding\",\"text/html\"]],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"textarea\",[],false]],[\"verbatim\",\"</math>\\n<div>a</div>\\n\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"the reviewed rewrite's output, R-4 </math> in an <xmp> inside the <foreignObject> of an <svg> in <annotation-xml>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1998/Math/MathML\",\"math\",[],false]],[\"open\",[\"http://www.w3.org/1998/Math/MathML\",\"annotation-xml\",[[\"encoding\",\"image/svg+xml\"]],false]],[\"open\",[\"http://www.w3.org/2000/svg\",\"svg\",[],false]],[\"open\",[\"http://www.w3.org/2000/svg\",\"foreignObject\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"xmp\",[],false]],[\"verbatim\",\"</math>  </svg>\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1998/Math/MathML\",\"math\",[],false]],[\"open\",[\"http://www.w3.org/1998/Math/MathML\",\"annotation-xml\",[[\"encoding\",\"image/svg+xml\"]],false]],[\"open\",[\"http://www.w3.org/2000/svg\",\"svg\",[],false]],[\"open\",[\"http://www.w3.org/2000/svg\",\"foreignObject\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"xmp\",[],false]],[\"verbatim\",\"</math> </svg>\\n\"],[\"close\"],[\"verbatim\",\"\\n\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"the reviewed rewrite's output, last review: wrap after &#8203;": [
+		{
+			"check": "rendered text",
+			"before": "aaaaaaaaaaaaaaaaaaaa​ b",
+			"after": "aaaaaaaaaaaaaaaaaaaa​b"
+		}
+	],
+	"the reviewed rewrite's output, last review: wrap after &#x200B;": [
+		{
+			"check": "rendered text",
+			"before": "aaaaaaaaaaaaaaaaaaaa​ b",
+			"after": "aaaaaaaaaaaaaaaaaaaa​b"
+		}
+	],
+	"the reviewed rewrite's output, last review: wrap after &ZeroWidthSpace;": [
+		{
+			"check": "rendered text",
+			"before": "aaaaaaaaaaaaaaaaaaaa​ b",
+			"after": "aaaaaaaaaaaaaaaaaaaa​b"
+		}
+	],
+	"the reviewed rewrite's output, last review: wrap before encoded U+200B across a tag": [
+		{
+			"check": "rendered text",
+			"before": "aaaaaaaaaaaaaaaaaaaa ​b",
+			"after": "aaaaaaaaaaaaaaaaaaaa​b"
+		}
+	],
+	"the reviewed rewrite's output, last review: over-long region changes script": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"pre\",[],false]],[\"open\",[\"http://www.w3.org/2000/svg\",\"svg\",[],true]],[\"close\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"script\",[],false]],[\"verbatim\",\"const x = \\\"</svg></pre><P>A  B</P>\\\";\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"pre\",[],false]],[\"open\",[\"http://www.w3.org/2000/svg\",\"svg\",[],true]],[\"close\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"script\",[],false]],[\"verbatim\",\"const x = \\\"</svg></pre>\\n<p>A B</p>\\n\\\";\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"the reviewed rewrite's output, last review: over-long region changes text": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"pre\",[],false]],[\"open\",[\"http://www.w3.org/2000/svg\",\"svg\",[],true]],[\"close\"],[\"close\"],[\"text\",\"ab\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"pre\",[],false]],[\"open\",[\"http://www.w3.org/2000/svg\",\"svg\",[],true]],[\"close\"],[\"close\"],[\"text\",\"a b\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "ab",
+			"after": "a b"
+		}
+	],
+	"the reviewed rewrite's output, last review: R-8 text after body": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"text\",\"ax\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"text\",\"a x\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "ax",
+			"after": "a x"
+		}
+	],
+	"the reviewed rewrite's output, last review: R-8 late body": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"text\",\"xa\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"text\",\"x a\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "xa",
+			"after": "x a"
+		}
+	],
+	"the reviewed rewrite's output, last review: R-8 late head": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"text\",\"ab\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"text\",\"a b\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "ab",
+			"after": "a b"
+		}
+	],
+	"a fault written by hand, R-5 whitespace added around an inline element in <template>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"template\",[],true]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"span\",[],false]],[\"text\",\"b\"],[\"close\"],[\"text\",\"c\"],[\"close\"],[\"close\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],true]],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"template\",[],true]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a \"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"span\",[],false]],[\"text\",\"b\"],[\"close\"],[\"text\",\" c\"],[\"close\"],[\"close\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],true]],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"a fault written by hand, R-5 whitespace removed in an inline element in <template>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"template\",[],true]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"div\",[],false]],[\"text\",\"a\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"em\",[],false]],[\"text\",\" b \"],[\"close\"],[\"text\",\"c\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"div\",[[\"hidden\",\"\"]],false]],[\"text\",\"d\"],[\"close\"],[\"close\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],true]],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"template\",[],true]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"div\",[],false]],[\"text\",\"a\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"em\",[],false]],[\"text\",\"b\"],[\"close\"],[\"text\",\"c\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"div\",[[\"hidden\",\"\"]],false]],[\"text\",\"d\"],[\"close\"],[\"close\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],true]],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"a fault written by hand, R-6 a comment that stripComments left in place": [
+		{
+			"check": "comments outside verbatim content",
+			"before": "[]",
+			"after": "[\" d \"]"
+		}
+	],
+	"a fault written by hand, R-6 a comment the browser makes of \"<!…>\", removed": [
+		{
+			"check": "comments outside verbatim content",
+			"before": "[\"x\",\" y\"]",
+			"after": "[\" y\"]"
+		}
+	],
+	"a fault written by hand, R-6 a comment in <svg>, removed": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a\"],[\"open\",[\"http://www.w3.org/2000/svg\",\"svg\",[],true]],[\"comment\",\"c\"],[\"close\"],[\"text\",\"b\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a\"],[\"open\",[\"http://www.w3.org/2000/svg\",\"svg\",[],true]],[\"close\"],[\"text\",\"b\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"a fault written by hand, R-6 the node the browser makes of \"<?x …>\", removed": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a\"],[\"instruction\",[\"x\",\"y\"]],[\"text\",\"b\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"ab\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"a fault written by hand, last review: processing instruction removed with stripComments": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a\"],[\"instruction\",[\"x\",\"y\"]],[\"text\",\"b\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"ab\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"quad's output, known: empty element ended by the next start tag": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"ul\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"li\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"li\",[],false]],[\"text\",\"b\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"ul\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"li\",[],false]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"li\",[],false]],[\"text\",\"b\"],[\"close\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"quad's output, known: empty <body> before </html>": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],true]],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"close\"],[\"close\"]]]"
+		}
+	],
+	"quad's output, known: block element with the attribute hidden": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a\"],[\"close\"],[\"text\",\"b\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"div\",[[\"hidden\",\"\"]],false]],[\"text\",\"x\"],[\"close\"],[\"text\",\"c\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a\"],[\"close\"],[\"text\",\"b \"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"div\",[[\"hidden\",\"\"]],false]],[\"text\",\"x\"],[\"close\"],[\"text\",\" c\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "a\n\nbc",
+			"after": "a\n\nb c"
+		}
+	],
+	"quad's output, known: block element with the attribute popover": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a\"],[\"close\"],[\"text\",\"b\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"div\",[[\"popover\",\"\"]],false]],[\"text\",\"x\"],[\"close\"],[\"text\",\"c\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a\"],[\"close\"],[\"text\",\"b \"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"div\",[[\"popover\",\"\"]],false]],[\"text\",\"x\"],[\"close\"],[\"text\",\" c\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "a\n\nbc",
+			"after": "a\n\nb c"
+		}
+	],
+	"quad's output, known: <dialog> that is not open": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a\"],[\"close\"],[\"text\",\"b\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"dialog\",[],false]],[\"text\",\"x\"],[\"close\"],[\"text\",\"c\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a\"],[\"close\"],[\"text\",\"b \"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"dialog\",[],false]],[\"text\",\"x\"],[\"close\"],[\"text\",\" c\"],[\"close\"],[\"close\"]]]"
+		},
+		{
+			"check": "rendered text",
+			"before": "a\n\nbc",
+			"after": "a\n\nb c"
+		}
+	],
+	"quad's output, known: whitespace at the end of the input in an open inline element": [
+		{
+			"check": "DOM",
+			"before": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"span\",[],false]],[\"text\",\"b \"],[\"close\"],[\"close\"],[\"close\"]]]",
+			"after": "[null,\"BackCompat\",[[\"open\",[\"http://www.w3.org/1999/xhtml\",\"html\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"head\",[],true]],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"body\",[],false]],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"p\",[],false]],[\"text\",\"a\"],[\"close\"],[\"open\",[\"http://www.w3.org/1999/xhtml\",\"span\",[],false]],[\"text\",\"b\"],[\"close\"],[\"close\"],[\"close\"]]]"
+		}
+	]
+}
