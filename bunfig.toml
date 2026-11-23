@@ -1,4 +1,4 @@
 [test]
-# Per file, as Bun applies it. The floor is the lowest file today; the fixes raise both to 1.0.
-coverageThreshold = { lines = 0.97, functions = 1.0 }
+# Per file: every line and function of the shipped code and the oracle must be exercised.
+coverageThreshold = { lines = 1.0, functions = 1.0 }
 coveragePathIgnorePatterns = ["tests/**", "differential/**", "bench/**"]
