@@ -1,0 +1,2 @@
+# Keep scripts, text fixtures and generated files identical across checkout platforms.
+* text=auto eol=lf

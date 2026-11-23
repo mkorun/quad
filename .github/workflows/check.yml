@@ -1,0 +1,54 @@
+# Run the plain check.sh gate on every push and pull request, on Linux, macOS and Windows.
+# Bun 1.4.5 runs through mise; the runners provide Chrome. Windows uses Git Bash.
+# A failing system does not stop the others. A new push cancels the run before it.
+# Every action is pinned to a commit.
+name: check
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: check (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Hosted-runner Chrome paths verified by successful runs on all three systems.
+          - os: ubuntu-24.04
+            chromium: /usr/bin/google-chrome
+          - os: macos-15
+            chromium: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+          - os: windows-2025
+            chromium: 'C:\Program Files\Google\Chrome\Application\chrome.exe'
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    env:
+      QUAD_CHROMIUM: ${{ matrix.chromium }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        timeout-minutes: 2
+        with:
+          persist-credentials: false
+      - uses: jdx/mise-action@2d8d4cafcbd33be2ea37d2b6f5ad595363d1f1ca # v5.1.1
+        timeout-minutes: 10
+        with:
+          version: 2026.8.5
+          mise_toml: |
+            [tools]
+            bun = "1.4.5"
+      - run: bun install --frozen-lockfile
+        timeout-minutes: 5
+      - run: ./check.sh
+        timeout-minutes: 20
