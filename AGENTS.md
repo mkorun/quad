@@ -35,4 +35,6 @@ quad is an HTML formatter and normalizer: it changes markup only so far that a b
 - `dist/` is built output that the gate compares: rebuild it with `bun run build` in every commit that changes the code.
 - `./check.sh` passes before every commit (the browser oracle takes Chromium from `QUAD_CHROMIUM`). Run it on its own
   and check its exit status; never pipe or chain it.
+- Every test file lives directly in `tests/` or `differential/` and ends in lowercase `.test.ts`; the gate stops at
+  any other file named like a test (`.test.`, `_spec.` and the like, in any case, ignored directories included).
 - The human versions, tags, publishes and pushes.
