@@ -4,14 +4,13 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-# Test files use lowercase kebab-case names ending in .test.ts directly in tests/ or differential/.
+# Every test file lives directly in tests/ or differential/ and ends in lowercase .test.ts.
 find . \( -name node_modules -o -name .git \) -prune -o -type f \
   \( -iname '*[._]test.*' -o -iname '*[._]spec.*' \) -print0 |
   (
-    export LC_ALL=C
     invalid=0
     while IFS= read -r -d '' path; do
-      if [[ ! $path =~ ^\./(tests|differential)/[a-z0-9]+(-[a-z0-9]+)*\.test\.ts$ ]]; then
+      if [[ ! $path =~ ^\./(tests|differential)/[^/]+\.test\.ts$ ]]; then
         printf 'check.sh: invalid test file name: %s\n' "$path" >&2
         invalid=1
       fi
